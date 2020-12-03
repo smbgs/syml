@@ -32,7 +32,7 @@ spec:
 
 
   fields:
-      - name: dimensional
+    - name: dimensional
       common:
         source: @sample-source_a
         
@@ -40,7 +40,7 @@ spec:
         - name: derived_field1
           type: TEXT
           source:
-              field: field1
+            field: field1
           
         - name: derived_field2
           type: NUMBER

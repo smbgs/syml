@@ -17,9 +17,9 @@ spec:
 
   fields:
     - name: field1
-	  type: text
+      type: text
     - name: field2
-	  type: integer
+      type: integer
 
 ```
 
@@ -42,6 +42,6 @@ spec:
 
   fields: 
     - name: field3
-	  type: integer
+      type: integer
 
 ```
