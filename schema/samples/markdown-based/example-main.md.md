@@ -21,37 +21,37 @@ spec:
     database: DEMO_DB
     schema: PUBLIC
     table: SAMPLE_DEST
-	
+    
   sources:
   
     - name: sample-source_a
-	  syml: ./some-schemas.md/schema/markdown-embedded-schema-1
+      syml: ./some-schemas.md/schema/markdown-embedded-schema-1
 
     - name: sample-source_b
-	  syml: ./some-schemas.md/schema/markdown-embedded-schema-2
+      syml: ./some-schemas.md/schema/markdown-embedded-schema-2
 
 
   fields:
-  	- name: dimensional
-	  common:
-		source: @sample-source_a
-	    
-	  fields:
-	    - name: derived_field1
-		  type: TEXT
-		  source:
-		  	field: field1
-		  
-	    - name: derived_field2
-		  type: NUMBER
-		  source:
-		    field: field2
+      - name: dimensional
+      common:
+        source: @sample-source_a
+        
+      fields:
+        - name: derived_field1
+          type: TEXT
+          source:
+              field: field1
+          
+        - name: derived_field2
+          type: NUMBER
+          source:
+            field: field2
 
-	    - name: derived_field3
-		  type: NUMBER
-		  source:
-			source: @sample-source_b		  
-		    field: field3			
+        - name: derived_field3
+          type: NUMBER
+          source:
+            source: @sample-source_b          
+            field: field3            
 ```
 
 ### Description
