@@ -44,4 +44,4 @@ to OpenAPI schemas.
 
 ### Examples
 
-- [TPC-H Snowflake](docs/samples/tpc-h/README.md)  contains a simple but relatevely complete example of the SYML schema definition in the markdown files.
+- [TPC-H Snowflake](../samples/tpc-h/README.md)  contains a simple but relatevely complete example of the SYML schema definition in the markdown files.

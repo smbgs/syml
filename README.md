@@ -7,7 +7,7 @@ tracing, migrations with rich versioning.
 
 ## Toolchain
 
-### [Definitions & Documentation](docs/schema/README)
+### [Definitions & Documentation](./docs/schema/README.md)
 
 Syml also can be embedded in Markdown, and the Syml toolchain
 should support both yaml and markdown based Syml definitions.
