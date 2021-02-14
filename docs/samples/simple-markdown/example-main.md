@@ -108,7 +108,7 @@ In this example you can see the following path:
 consists of the following parts:
 
 - `./some-schemas.md` - this is the URI part of
-  [the reference](./some-schemas.md) relative to the current file 
+  [the reference](some-schemas.md) relative to the current file 
   in the example, but URI schema is supported (for example, you 
   can reference another github repository using 
   `http(s)://<path to the specific schema>`).  

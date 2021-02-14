@@ -7,7 +7,7 @@ tracing, migrations with rich versioning.
 
 ## Toolchain
 
-### Definitions & Documentation
+### [Definitions & Documentation](docs/schema/README)
 
 Syml also can be embedded in Markdown, and the Syml toolchain
 should support both yaml and markdown based Syml definitions.
@@ -57,6 +57,11 @@ from the database entities.
 SQL Forward Engineer module is capable of connecting to the
 compatible SQL databases and managing (creating AND updating)
 the database entities based on the SYML object model.
+
+### Data Analyzer
+
+Data analyzer module is capable of connecting to the compatible databases and
+retreiving the analytical data from entities (amount of rows in a table, distinct colum values, value histogramms etc.)
 
 ### K8S database manager
 TBD
