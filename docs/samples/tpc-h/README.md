@@ -318,7 +318,7 @@ spec:
       type: TEXT
 
     - name: L_COMMENT
-    type: TEXT
+      type: TEXT
 
 ```
 
