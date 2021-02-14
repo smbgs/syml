@@ -11,7 +11,7 @@ meta:
   name: tpc-h-part
   version: 2.17.1
   desc: >
-  	Parts that can be supplied to customers  	
+    Parts that can be supplied to customers    
   
 spec:
 
@@ -24,51 +24,51 @@ spec:
       database: DEMO_DB
       schema: TPC-H
       table: PART
-	  
-  common:
-	 
-  	analytics:
-	  enabled: true
-	  metrics:
-	   - metric: distinct
-	
-	dimension: overwrite
-	  
+    
+  common:   
+    analytics:
+      enabled: true
+    metrics:
+    - metric: distinct
+  
+    dimension: overwrite
+    
   fields:
-  	- name: P_PARTKEY
-	  type: TEXT
-	  tags: ["pk"]
-	
-	- name: P_NAME 
-	  type: TEXT
-	
-	- name: P_MFGR 
-	  type: TEXT
-	  
-	- name: P_BRAND 
-	  type: TEXT
-	  
-	- name: P_TYPE 
-	  type: TEXT
-	
-	- name: P_SIZE
-	  type: INTEGER
-	  
-	- name: P_CONTAINER
-	  type: TEXT
-	  analytics:
-	    metrics:
-		  - metric: enum
-	
-	- name: P_RETAILPRICE
-	  type: DECIMAL
-	  analytics:
-	    metrics:
-          - metric: spread
-		    top: 10
-	  
-	- name: P_COMMENT 
-	  type: TEXT
+  
+  - name: P_PARTKEY
+    type: TEXT
+    tags: ["pk"]
+  
+  - name: P_NAME 
+    type: TEXT
+  
+  - name: P_MFGR 
+    type: TEXT
+    
+  - name: P_BRAND 
+    type: TEXT
+    
+  - name: P_TYPE 
+    type: TEXT
+  
+  - name: P_SIZE
+    type: INTEGER
+    
+  - name: P_CONTAINER
+    type: TEXT
+    analytics:
+      metrics:
+      - metric: enum
+  
+  - name: P_RETAILPRICE
+    type: DECIMAL
+    analytics:
+      metrics:
+      - metric: spread
+        top: 10
+    
+  - name: P_COMMENT 
+    type: TEXT
   
 ```
 
@@ -80,7 +80,7 @@ meta:
   name: tpc-h-supplier
   version: 2.17.1
   desc: >
-  	Part supplier
+    Part supplier
   
 spec:
 
@@ -93,41 +93,41 @@ spec:
       database: DEMO_DB
       schema: TPC-H
       table: SUPPLIER
-	  
+    
   fields:
-  	- name: S_SUPPKEY
-	  type: TEXT
-	  tags: ["pk"]
-	  
-	- name: PROFILE
-	  type: GROUP
-      dimension: overwrite	  
-		
-	  fields: 
-	
-		- name: S_NAME 
-		  type: TEXT	  
+  - name: S_SUPPKEY
+    type: TEXT
+    tags: ["pk"]
+    
+  - name: PROFILE
+    type: GROUP
+      dimension: overwrite    
+    
+    fields: 
+  
+    - name: S_NAME 
+      type: TEXT    
 
-		- name: S_ADDRESS
-		  type: TEXT
+    - name: S_ADDRESS
+      type: TEXT
 
-		- name: S_NATIONKEY 
-		  type: TEXT
-		  relation:
-			type: foreign-key
-			tags: ["logical"]
-			target:
-			  schema: @md/schema/tpc-h-nation
-			  field: NATIONKEY
+    - name: S_NATIONKEY 
+      type: TEXT
+      relation:
+      type: foreign-key
+      tags: ["logical"]
+      target:
+        schema: @md/schema/tpc-h-nation
+        field: NATIONKEY
 
-		- name: S_PHONE
-		  type: TEXT
-	
-		- name: S_ACCTBAL
-		  type: DECIMAL
-	  
-	- name: S_COMMENT
-	  type: TEXT
+    - name: S_PHONE
+      type: TEXT
+  
+    - name: S_ACCTBAL
+      type: DECIMAL
+    
+  - name: S_COMMENT
+    type: TEXT
   
 ```
 
@@ -140,7 +140,7 @@ meta:
   name: tpc-h-part-supplier
   version: 2.17.1
   desc: >
-  	Links the parts to suppliers and adds availability and supply costs
+    Links the parts to suppliers and adds availability and supply costs
   
 spec:
 
@@ -153,38 +153,38 @@ spec:
       database: DEMO_DB
       schema: TPC-H
       table: PARTSUPP
-	  
+    
   fields:
-	  
-	- name: PS_PARTKEY
-	  type: TEXT
-	  tags: ["pk"]
-	  relation:
-	  	type: foreign-key
-		tags: ["logical"]
-		target:
-		  schema: @md/schema/tpc-h-part
-		  field: P_PARTKEY
-		  
-	- name: PS_SUPPKEY
-	  type: TEXT
-	  tags: ["pk"]
-  	  relation:
-	  	type: foreign-key
-		tags: ["logical"]
-		target:
-		  schema: @md/schema/tpc-h-supplier
-		  field: S_SUPKEY
+    
+  - name: PS_PARTKEY
+    type: TEXT
+    tags: ["pk"]
+    relation:
+      type: foreign-key
+    tags: ["logical"]
+    target:
+      schema: @md/schema/tpc-h-part
+      field: P_PARTKEY
+      
+  - name: PS_SUPPKEY
+    type: TEXT
+    tags: ["pk"]
+      relation:
+      type: foreign-key
+    tags: ["logical"]
+    target:
+      schema: @md/schema/tpc-h-supplier
+      field: S_SUPKEY
 
-	- name: PS_AVAILQTY
-	  type: INTEGER
+  - name: PS_AVAILQTY
+    type: INTEGER
 
-	- name: PS_SUPPLYCOST
-	  type: INTEGER
-	  
-	- name: COMMENT
-	  type: TEXT	
-		  
+  - name: PS_SUPPLYCOST
+    type: INTEGER
+    
+  - name: COMMENT
+    type: TEXT  
+      
 ```
 
 ### Orders
@@ -196,7 +196,7 @@ meta:
   type: domain  
   version: 2.17.1
   desc: >
-  	Customer orders
+    Customer orders
   
 spec:
 
@@ -208,33 +208,33 @@ spec:
       database: DEMO_DB
       schema: TPC-H
       table: ORDER
-	  
+    
   fields:
   
-  	- name: O_ORDERKEY
-	  type: TEXT
-	  tags: ["pk"]
+  - name: O_ORDERKEY
+    type: TEXT
+    tags: ["pk"]
 
-  	- name: O_CUSTKEY
-	  type: TEXT
+  - name: O_CUSTKEY
+    type: TEXT
 
-  	- name: O_ORDERSTATUS
-	  type: TEXT
+  - name: O_ORDERSTATUS
+    type: TEXT
 
-  	- name: O_TOTALPRICE
-	  type: DECIMAL
+  - name: O_TOTALPRICE
+    type: DECIMAL
 
-  	- name: O_ORDERPRIORITY
-	  type: TEXT
+  - name: O_ORDERPRIORITY
+    type: TEXT
 
-  	- name: O_CLERK
-	  type: TEXT
+  - name: O_CLERK
+    type: TEXT
 
-  	- name: O_SHIPPRIORITY
-	  type: INTEGER
+  - name: O_SHIPPRIORITY
+    type: INTEGER
 
-  	- name: O_COMMENT
-	  type: TEXT
+  - name: O_COMMENT
+    type: TEXT
 
 ```
 
@@ -247,7 +247,7 @@ meta:
   type: fact  
   version: 2.17.1
   desc: > 
-  	Detailed list of order lines
+    Detailed list of order lines
   
 spec:
 
@@ -259,65 +259,66 @@ spec:
       database: DEMO_DB
       schema: TPC-H
       table: LINEITEM
-	  
+    
   fields:
   
-  	- name: L_ORDERKEY
-	  type: TEXT
-	  tags: ["pk"]
+  - name: L_ORDERKEY
+    type: TEXT
+    tags: ["pk"]
 
-  	- name: L_PARTKEY
-	  type: TEXT
+  - name: L_PARTKEY
+    type: TEXT
 
-  	- name: L_SUPPKEY
-	  type: TEXT
+  - name: L_SUPPKEY
+    type: TEXT
 
-  	- name: L_LINENUMBER
-	  type: INTEGER
-	  tags: ["pk"]
+  - name: L_LINENUMBER
+    type: INTEGER
+    tags: ["pk"]
 
-  	- name: L_LINESTATUS
-	  type: TEXT
+  - name: L_LINESTATUS
+    type: TEXT
 
-	- name: MONETARY
-	  type: GROUP
-	  fields:
+  - name: MONETARY
+    type: GROUP
 
-		- name: L_QUANTITY
-		  type: DECIMAL
+    fields:
 
-		- name: L_EXTENDEDPRICE
-		  type: DECIMAL
+    - name: L_QUANTITY
+      type: DECIMAL
 
-		- name: L_DISCOUNT
-		  type: DECIMAL
+    - name: L_EXTENDEDPRICE
+      type: DECIMAL
 
-		- name: L_TAX
-		  type: DECIMAL
+    - name: L_DISCOUNT
+      type: DECIMAL
 
-	- name: SHIPPING
-	  type: GROUP
+    - name: L_TAX
+      type: DECIMAL
 
-		- name: L_RETURNFLAG
-		  type: TEXT
+  - name: SHIPPING
+    type: GROUP
 
-		- name: L_SHIPDATE
-		  type: DATE
+    - name: L_RETURNFLAG
+      type: TEXT
 
-		- name: L_COMMITDATE
-		  type: DATE
+    - name: L_SHIPDATE
+      type: DATE
 
-		- name: L_RECEIPTDATE
-		  type: DATE
+    - name: L_COMMITDATE
+      type: DATE
 
-		- name: L_SHIPINSTRUCT
-		  type: TEXT
+    - name: L_RECEIPTDATE
+      type: DATE
 
-		- name: L_SHIPMODE
-		  type: TEXT
+    - name: L_SHIPINSTRUCT
+      type: TEXT
 
-  	- name: L_COMMENT
-	  type: TEXT
+    - name: L_SHIPMODE
+      type: TEXT
+
+    - name: L_COMMENT
+    type: TEXT
 
 ```
 
@@ -330,7 +331,7 @@ meta:
   type: domain  
   version: 2.17.1
   desc: >
-  	Customer orders
+    Customer orders
   
 spec:
 
@@ -342,45 +343,46 @@ spec:
       database: DEMO_DB
       schema: TPC-H
       table: CUSTOMER
-	  
+    
   fields:
   
-  	- name: C_CUSTKEY
-	  type: TEXT
-	  tags: ["pk"]
-	  
-	- name: PROFILE
-	  type: GROUP
-      dimension: overwrite	
-	  fields:
-	
-		- name: C_NAME 
-		  type: TEXT	  
+  - name: C_CUSTKEY
+    type: TEXT
+    tags: ["pk"]
+    
+  - name: PROFILE
+    type: GROUP
+      dimension: overwrite  
 
-		- name: C_ADDRESS
-		  type: TEXT
+    fields:
 
-		- name: C_NATIONKEY 
-		  type: TEXT
-		  relation:
-			type: foreign-key
-			tags: ["logical"]
-			target:
-			  schema: @md/schema/tpc-h-nation
-			  field: NATIONKEY
+    - name: C_NAME 
+      type: TEXT    
 
-		- name: C_PHONE
-		  type: TEXT
+    - name: C_ADDRESS
+      type: TEXT
 
-		- name: C_ACCTBAL
-		  type: DECIMAL
-		  desc: Account balance
+    - name: C_NATIONKEY 
+      type: TEXT
+      relation:
+      type: foreign-key
+      tags: ["logical"]
+      target:
+        schema: @md/schema/tpc-h-nation
+        field: NATIONKEY
 
-	- name: C_MKTSEGMENT
-	  type: TEXT
+    - name: C_PHONE
+      type: TEXT
 
-	- name: C_COMMENT
-	  type: TEXT
+    - name: C_ACCTBAL
+      type: DECIMAL
+      desc: Account balance
+
+  - name: C_MKTSEGMENT
+    type: TEXT
+
+  - name: C_COMMENT
+    type: TEXT
 ```
 
 ### Nation
@@ -392,7 +394,7 @@ meta:
   type: dimension  
   version: 2.17.1
   desc: >
-  	Nation (country etc.)
+    Nation (country etc.)
   
 spec:
 
@@ -404,26 +406,27 @@ spec:
       database: DEMO_DB
       schema: TPC-H
       table: NATION
-	  
+    
   fields:
-  	- name: NATIONKEY
-	  type: TEXT
-	  tags: ["pk"]
-	
-	- name: NAME 
-	  type: TEXT	  
+  
+  - name: NATIONKEY
+    type: TEXT
+    tags: ["pk"]
+  
+  - name: NAME 
+    type: TEXT    
 
-	- name: REGIONKEY 
-	  type: TEXT	  
-  	  relation:
-	  	type: foreign-key
-		tags: ["logical"]
-		target:
-		  schema: @md/schema/tpc-h-region
-		  field: R_REGIONKEY
+  - name: REGIONKEY 
+    type: TEXT    
+      relation:
+      type: foreign-key
+    tags: ["logical"]
+    target:
+      schema: @md/schema/tpc-h-region
+      field: R_REGIONKEY
 
-	- name: COMMENT
-	  type: TEXT	  
+  - name: COMMENT
+    type: TEXT    
 
 ```
 
@@ -438,7 +441,7 @@ meta:
   type: dimension  
   version: 2.17.1
   desc: > 
-  	Region (asia, europe etc.)
+    Region (asia, europe etc.)
   
 spec:
 
@@ -450,16 +453,17 @@ spec:
       database: DEMO_DB
       schema: TPC-H
       table: REGION
-	  
+    
   fields:
-  	- name: R_REGIONKEY
-	  type: TEXT
-	  tags: ["pk"]
-	
-	- name: R_NAME 
-	  type: TEXT	  
+  
+  - name: R_REGIONKEY
+    type: TEXT
+    tags: ["pk"]
+  
+  - name: R_NAME 
+    type: TEXT    
 
-	- name: R_COMMENT
-	  type: TEXT	  
+  - name: R_COMMENT
+    type: TEXT    
 
 ```

@@ -16,55 +16,56 @@ meta:
 spec:
 
   for:
-  	syml: ./README.md/schema/tpc-h-part
-	
+    syml: ./README.md/schema/tpc-h-part
+  
   totals:
-  	lines: 10000
-	size: ~16Gb
+    lines: 10000
+    size: ~16Gb
 
   fields:
-  	- name: P_PARTKEY
-	  distinct: 10000
-	
-	- name: P_NAME 
-	  distinct: 10000
-	
-	- name: P_MFGR 
-	  distinct: 1450
-	  
-	- name: P_BRAND 
-	  distinct: 213
-	  top3Distinct:
-	   - Brand One
-	   - Brand Two
-	   - Brand Three
-	  
-	- name: P_TYPE 
-	  distinct: 1200
-	  top3Distinct:
-	   - Good part type
-	   - Even better part type
-	   - Bad part type
-		
-	- name: P_SIZE
-	  distinct: 4
-	  enum:
-	   - small
-	   - medium
-	   - large
-	   - x-large
-	  
-	- name: P_CONTAINER
-	  distinct: 4
-	
-	- name: P_RETAILPRICE
-	  spread:
-	  	top10%: 100 - 120
-	  	top20%: 120 - 140
-	  
-	- name: P_COMMENT 	
-	  empty:
-	   percentage: 10.0
-	   amount: 1000
+    
+  - name: P_PARTKEY
+    distinct: 10000
+  
+  - name: P_NAME 
+    distinct: 10000
+  
+  - name: P_MFGR 
+    distinct: 1450
+    
+  - name: P_BRAND 
+    distinct: 213
+    top3Distinct:
+    - Brand One
+    - Brand Two
+    - Brand Three
+    
+  - name: P_TYPE 
+    distinct: 1200
+    top3Distinct:
+    - Good part type
+    - Even better part type
+    - Bad part type
+  
+  - name: P_SIZE
+    distinct: 4
+    enum:
+    - small
+    - medium
+    - large
+    - x-large
+    
+  - name: P_CONTAINER
+    distinct: 4
+  
+  - name: P_RETAILPRICE
+    spread:
+      top10%: 100 - 120
+      top20%: 120 - 140
+    
+  - name: P_COMMENT   
+    empty:
+      percentage: 10.0
+      amount: 1000
 
 ```

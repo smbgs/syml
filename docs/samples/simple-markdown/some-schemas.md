@@ -21,7 +21,7 @@ spec:
       type: text
     - name: field2
       type: integer
-	  
+  
 ```
 
 ## Schema 2
