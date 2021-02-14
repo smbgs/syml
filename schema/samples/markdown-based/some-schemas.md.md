@@ -5,6 +5,7 @@ apiVersion: v1.syml.somebugs.com
 kind: Schema
 meta:
   name: markdown-embedded-schema-1
+  version: 0.0.1
   
 spec:
 
@@ -30,7 +31,8 @@ apiVersion: v1.syml.somebugs.com
 kind: Schema
 meta:
   name: markdown-embedded-schema-2
-  
+  version: 0.0.1
+
 spec:
 
   storage:
