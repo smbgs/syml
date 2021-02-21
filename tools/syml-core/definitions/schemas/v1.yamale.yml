@@ -1,0 +1,65 @@
+apiVersion: enum('syml.somebugs.com/v1')
+kind: enum('Schema')
+meta:
+  name: str()
+  version: str()
+  desc: str(required=False)
+
+spec:
+
+  source: include('source', required=False)
+  dest: include('destination', required=False)
+
+  common: map(required=False)
+
+  fields: list(include('field'))
+
+
+---
+fieldBase:
+  type: str(required=False)
+  tags: list(str(), required=False)
+  relation: include('relation', required=False)
+  source: include('schemaFieldReference', required=False)
+  hints: map(required=False)
+
+---
+field:
+  name: str()
+  desc: str(required=False)
+
+  type: str(required=False)
+  tags: list(str(), required=False)
+  relation: include('relation', required=False)
+  source: include('schemaFieldReference', required=False)
+  common: include('fieldBase', required=False) # TODO: just partial when possible
+
+  hints: map(required=False)
+  fields: list(include('field'), required=False)
+
+---
+destination:
+  kind: enum('database', 'api')
+  provider: enum('postgres', 'snowflake')
+  type: enum('table', 'view')
+  spec: any(include('destinationSpecTable'))
+
+
+---
+destinationSpecTable:
+  type: enum('dimension', 'fact', required=False)
+  database: str()
+  schema: str()
+  table: str()
+
+---
+relation:
+  type: enum('foreign-key', 'reference')
+  desc: str(required=False)
+  target: include('schemaFieldReference')
+
+---
+schemaFieldReference:
+  schema: str()
+  field: str()
+  desc: str(required=False)

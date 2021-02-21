@@ -1,0 +1,50 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-part-supplier
+  version: 2.17.1
+  desc: >
+    Links the parts to suppliers and adds availability and supply costs
+
+spec:
+
+  dest:
+    kind: database
+    provider: snowflake
+    type: table
+    spec:
+      type: dimension
+      database: DEMO_DB
+      schema: TPC-H
+      table: PARTSUPP
+
+  fields:
+
+    - name: PS_PARTKEY
+      type: TEXT
+      tags: ["pk"]
+
+      relation:
+        type: reference
+        target:
+          schema: ./part.syml.yml
+          field: P_PARTKEY
+
+    - name: PS_SUPPKEY
+      type: TEXT
+      tags: ["pk"]
+
+      relation:
+        type: reference
+        target:
+          schema: ./supplier.syml.yml
+          field: S_SUPKEY
+
+    - name: PS_AVAILQTY
+      type: INTEGER
+
+    - name: PS_SUPPLYCOST
+      type: INTEGER
+
+    - name: COMMENT
+      type: TEXT

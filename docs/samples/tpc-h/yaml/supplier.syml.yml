@@ -1,0 +1,64 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-part
+  version: 2.17.1
+  desc: >
+    Parts that can be supplied to customers
+
+spec:
+
+  dest:
+    kind: database
+    provider: snowflake
+    type: table
+    spec:
+      type: dimension
+      database: DEMO_DB
+      schema: TPC-H
+      table: PART
+
+  common:
+    hints:
+      analytics: true
+      metrics:
+        - metric: distinct
+
+    dimension: overwrite
+
+  fields:
+
+    - name: P_PARTKEY
+      type: TEXT
+      tags: ["pk"]
+
+    - name: P_NAME
+      type: TEXT
+
+    - name: P_MFGR
+      type: TEXT
+
+    - name: P_BRAND
+      type: TEXT
+
+    - name: P_TYPE
+      type: TEXT
+
+    - name: P_SIZE
+      type: INTEGER
+
+    - name: P_CONTAINER
+      type: TEXT
+      hints:
+        metrics:
+          - metric: enum
+
+    - name: P_RETAILPRICE
+      type: DECIMAL
+      hints:
+        metrics:
+          - metric: spread
+            top: 10
+
+    - name: P_COMMENT
+      type: TEXT

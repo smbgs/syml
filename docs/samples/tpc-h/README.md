@@ -114,9 +114,9 @@ spec:
     - name: S_NATIONKEY 
       type: TEXT
       relation:
-      type: foreign-key
-      tags: ["logical"]
-      target:
+        type: foreign-key
+        tags: ["logical"]
+        target:
         schema: @md/schema/tpc-h-nation
         field: NATIONKEY
 
