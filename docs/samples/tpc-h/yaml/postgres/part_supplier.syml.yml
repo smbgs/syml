@@ -1,0 +1,80 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-part-supplier-pg
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Links the parts to suppliers and adds availability and supply costs
+
+spec:
+
+  dest:
+    kind: database
+    provider: postgres
+    type: table
+    spec:
+      database: demo
+      schema: tpch
+      table: part
+
+  source:
+    schema: ../snowflake/part_supplier.syml.yml
+
+  fields:
+
+    - name: id
+      type: GROUP
+      constraints: ["pk"]
+      fields:
+        - name: supplier_id
+          type: INTEGER
+          relation:
+            type: reference
+            target:
+              schema: ./supplier.syml.yml
+              field: id.supplier_id
+
+        - name: part_id
+          type: BIGINTEGER
+          relation:
+            type: reference
+            target:
+              schema: ./supplier.syml.yml
+              field: id.supplier_id
+
+    - name: key
+      type: GROUP
+      constraints: ["not-empty", "unique"]
+
+      fields:
+
+        - name: supplier_key
+          type: TEXT
+          sourceField: PS_SUPPKEY
+          relation:
+            type: reference
+            target:
+              schema: ./supplier.syml.yml
+              field: ID.supplier_key
+
+        - name: part_key
+          type: TEXT
+          sourceField: PS_PARTKEY
+          relation:
+            type: reference
+            target:
+              schema: ./part.syml.yml
+              field: ID.part_key
+
+    - name: available_quantity
+      type: INTEGER
+      sourceField: PS_AVAILQTY
+
+    - name: supply_cost
+      type: INTEGER
+      sourceField: PS_SUPPLYCOST
+
+    - name: COMMENT
+      type: TEXT
+      sourceField: COMMENT

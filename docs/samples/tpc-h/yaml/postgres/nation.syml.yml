@@ -1,0 +1,75 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-nation-pg
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Nation (country etc.)
+
+spec:
+
+  dest:
+    kind: database
+    provider: postgres
+    type: table
+    spec:
+      database: demo
+      schema: tpch
+      table: nation
+
+  source:
+    schema: ../snowflake/nation.syml.yml
+
+  fields:
+
+    - name: id
+      dimension: retain
+
+      fields:
+
+        - name: nation_id
+          type: SERIAL
+
+        - name: nation_key
+          type: TEXT
+          constraints: ["non-empty"]
+          sourceField: NATIONKEY
+
+    - name: name
+      dimension: overwrite
+      type: TEXT
+      constraints: ["non-empty"]
+
+    - name: region
+      relation:
+        target:
+          schema: ./region.syml.yml
+          field: ID
+
+      fields:
+
+        - name: region_id
+          type: INTEGER
+          relation:
+            type: foreign-key
+            kind: many-to-one
+            targetField: region_id
+            lookup:
+              via: region_key
+              group: ID
+
+        - name: region_key
+          type: TEXT
+          constraints: ["non-null"]
+          dimension: overwrite
+          relation:
+            type: reference
+            kind: many-to-one
+            target:
+              schema: ./region.syml.yml
+              field: region_key
+
+    - name: COMMENT
+      dimension: overwrite
+      type: TEXT

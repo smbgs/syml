@@ -2,36 +2,35 @@ apiVersion: enum('syml.somebugs.com/v1')
 kind: enum('Schema')
 meta:
   name: str()
+  type: enum('dimension', 'fact')
   version: str()
   desc: str(required=False)
 
-spec:
-
-  source: include('source', required=False)
-  dest: include('destination', required=False)
-
-  common: map(required=False)
-
-  fields: list(include('field'))
-
+spec: include('fieldBase')
 
 ---
 fieldBase:
+  dest: include('destination', required=False)
+  source: any(include('schemaFieldReference'), list(include('schemaFieldReference')), required=False)
+  common: map(required=False)
   type: str(required=False)
+  dimension: enum('retain', 'overwrite', 'new-row', 'new-attribute', 'history-table', 'history-embedding', 'combined', required=False)
   tags: list(str(), required=False)
   relation: include('relation', required=False)
-  source: include('schemaFieldReference', required=False)
+
   hints: map(required=False)
+  fields: list(include('field'), required=False)
 
 ---
 field:
   name: str()
   desc: str(required=False)
+  dimension: enum('retain', 'overwrite', 'new-row', 'new-attribute', 'history-table', 'history-embedding', 'combined', required=False)
+  source: include('schemaFieldReference', required=False)
 
   type: str(required=False)
   tags: list(str(), required=False)
   relation: include('relation', required=False)
-  source: include('schemaFieldReference', required=False)
   common: include('fieldBase', required=False) # TODO: just partial when possible
 
   hints: map(required=False)
@@ -63,3 +62,4 @@ schemaFieldReference:
   schema: str()
   field: str()
   desc: str(required=False)
+

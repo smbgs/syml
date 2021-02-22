@@ -1,0 +1,74 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-part-pg
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Parts that can be supplied to customers
+
+spec:
+
+  dest:
+    kind: database
+    provider: postgres
+    type: table
+    spec:
+      database: demo
+      schema: tpch
+      table: part
+
+  source:
+    schema: ../snowflake/part.syml.yml
+
+  fields:
+
+    - name: id
+      dimension: retain
+      type: GROUP
+      fields:
+
+        - name: part_id
+          type: BIGSERIAL
+          constraints: ["pk"]
+
+        - name: part_key
+          type: TEXT
+          sourceField: P_PARTKEY
+          constraints: ["non-empty"]
+
+    - name: name
+      type: TEXT
+      constraints: ["non-empty"]
+      sourceField: P_NAME
+
+    # TODO: normalize?
+    - name: manufacturer
+      type: TEXT
+      sourceField: P_MFGR
+
+    # TODO: normalize?
+    - name: brand
+      type: TEXT
+      sourceField: P_BRAND
+
+    # TODO: normalize?
+    - name: type
+      type: TEXT
+      sourceField: P_TYPE
+
+    - name: size
+      type: INTEGER
+      sourceField: P_SIZE
+
+    - name: container
+      type: TEXT
+      sourceField: P_CONTAINER
+
+    - name: retail_price
+      type: DECIMAL
+      sourceField: P_RETAILPRICE
+
+    - name: comment
+      type: TEXT
+      sourceField: P_COMMENT

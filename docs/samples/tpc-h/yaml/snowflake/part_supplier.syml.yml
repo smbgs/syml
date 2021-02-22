@@ -2,6 +2,7 @@ apiVersion: syml.somebugs.com/v1
 kind: Schema
 meta:
   name: tpc-h-part-supplier
+  type: dimension
   version: 2.17.1
   desc: >
     Links the parts to suppliers and adds availability and supply costs
@@ -20,25 +21,28 @@ spec:
 
   fields:
 
-    - name: PS_PARTKEY
-      type: TEXT
+    - name: ID
+      type: GROUP
       tags: ["pk"]
+      fields:
 
-      relation:
-        type: reference
-        target:
-          schema: ./part.syml.yml
-          field: P_PARTKEY
+        - name: PS_PARTKEY
+          type: TEXT
 
-    - name: PS_SUPPKEY
-      type: TEXT
-      tags: ["pk"]
+          relation:
+            type: reference
+            target:
+              schema: ./part.syml.yml
+              field: P_PARTKEY
 
-      relation:
-        type: reference
-        target:
-          schema: ./supplier.syml.yml
-          field: S_SUPKEY
+        - name: PS_SUPPKEY
+          type: TEXT
+
+          relation:
+            type: reference
+            target:
+              schema: ./supplier.syml.yml
+              field: S_SUPKEY
 
     - name: PS_AVAILQTY
       type: INTEGER

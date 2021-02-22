@@ -1,0 +1,52 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-line-item
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Customer orders
+
+spec:
+
+  dest:
+    kind: database
+    provider: snowflake
+    type: table
+    spec:
+      database: DEMO_DB
+      schema: TPC-H
+      table: ORDER
+
+  fields:
+
+    - name: O_ORDERKEY
+      type: TEXT
+      dimension: retain
+      tags: ["pk"]
+
+    - name: O_CUSTKEY
+      type: TEXT
+      relation:
+        type: reference
+        target:
+          schema: ./region.syml.yml
+          field: R_REGIONKEY
+
+    - name: O_ORDERSTATUS
+      type: TEXT
+
+    - name: O_TOTALPRICE
+      type: DECIMAL
+
+    - name: O_ORDERPRIORITY
+      type: TEXT
+
+    - name: O_CLERK
+      type: TEXT
+
+    - name: O_SHIPPRIORITY
+      type: INTEGER
+
+    - name: O_COMMENT
+      type: TEXT

@@ -1,0 +1,61 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-customer
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Customer
+
+spec:
+
+  dest:
+    kind: database
+    provider: snowflake
+    type: table
+    spec:
+      database: DEMO_DB
+      schema: TPC-H
+      table: CUSTOMER
+
+  fields:
+
+    - name: C_CUSTKEY
+      type: TEXT
+      dimension: retain
+      tags: ["pk"]
+
+    - name: PROFILE
+      type: GROUP
+      dimension: overwrite
+
+      fields:
+
+        - name: C_NAME
+          type: TEXT
+
+        - name: C_ADDRESS
+          type: TEXT
+
+        - name: C_NATIONKEY
+          type: TEXT
+          relation:
+            type: reference
+            target:
+              schema: ./nation.syml.yml
+              field: NATIONKEY
+
+        - name: C_PHONE
+          type: TEXT
+
+        - name: C_ACCTBAL
+          type: DECIMAL
+          desc: Account balance
+
+    - name: C_MKTSEGMENT
+      type: TEXT
+      dimension: overwrite
+
+    - name: C_COMMENT
+      dimension: overwrite
+      type: TEXT

@@ -1,0 +1,90 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-line-item
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Detailed list of order lines
+
+spec:
+
+  dest:
+    kind: database
+    provider: snowflake
+    type: table
+    spec:
+      database: DEMO_DB
+      schema: TPC-H
+      table: LINEITEM
+
+  fields:
+
+    - name: key
+      tags: ["pk"]
+      dimension: retain
+      fields:
+
+      - name: L_LINENUMBER
+        type: INTEGER
+
+      - name: L_ORDERKEY
+        type: TEXT
+
+    - name: L_PARTKEY
+      dimension: retain
+      type: TEXT
+
+    - name: L_SUPPKEY
+      dimension: retain
+      type: TEXT
+
+    - name: L_LINESTATUS
+      dimension: overwrite
+      type: TEXT
+
+    - name: MONETARY
+      type: GROUP
+      dimension: retain
+
+      fields:
+
+        - name: L_QUANTITY
+          type: DECIMAL
+
+        - name: L_EXTENDEDPRICE
+          type: DECIMAL
+
+        - name: L_DISCOUNT
+          type: DECIMAL
+
+        - name: L_TAX
+          type: DECIMAL
+
+    - name: SHIPPING
+      type: GROUP
+      dimension: overwrite
+
+      fields:
+
+        - name: L_RETURNFLAG
+          type: TEXT
+
+        - name: L_SHIPDATE
+          type: DATE
+
+        - name: L_COMMITDATE
+          type: DATE
+
+        - name: L_RECEIPTDATE
+          type: DATE
+
+        - name: L_SHIPINSTRUCT
+          type: TEXT
+
+        - name: L_SHIPMODE
+          type: TEXT
+
+    - name: L_COMMENT
+      dimension: overwrite
+      type: TEXT

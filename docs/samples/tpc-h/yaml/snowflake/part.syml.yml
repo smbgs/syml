@@ -2,6 +2,7 @@ apiVersion: syml.somebugs.com/v1
 kind: Schema
 meta:
   name: tpc-h-part
+  type: dimension
   version: 2.17.1
   desc: >
     Parts that can be supplied to customers

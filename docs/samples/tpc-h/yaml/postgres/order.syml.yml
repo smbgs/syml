@@ -1,0 +1,84 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-line-item-pg
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Customer orders
+
+spec:
+
+  dest:
+    kind: database
+    provider: postgres
+    type: table
+    spec:
+      database: demo
+      schema: tpch
+      table: order
+
+  source:
+    schema: ../snowflake/nation.syml.yml
+
+  fields:
+
+    - name: ID
+      dimension: retain
+      type: GROUP
+      fields:
+
+        - name: order_id
+          type: BIGSERIAL
+          constraints: ["pk"]
+
+        - name: order_key
+          type: TEXT
+          sourceField: O_ORDERKEY
+          constraints: ["non-empty"]
+
+    - name: customer
+      type: GROUP
+      relation:
+        target:
+          schema: ./customer.syml.yml
+          field: ID
+
+      fields:
+        - name: customer_id
+          relation:
+            type: foreign-key
+            targetField: ID
+            lookup:
+              via: customer_key
+              to: customer_id
+
+        - name: customer_key
+          relation:
+            type: reference
+            field: customer_key
+          sourceField: O_CUSTKEY
+
+    - name: status
+      type: TEXT
+      sourceField: O_ORDERSTATUS
+
+    - name: total_price
+      type: DECIMAL
+      sourceField: O_TOTALPRICE
+
+    - name: clerk
+      type: TEXT
+      sourceField: O_CLERK
+
+    - name: order_priority
+      type: TEXT
+      sourceField: O_ORDERPRIORITY
+
+    - name: shipping_priority
+      type: INTEGER
+      sourceField: O_SHIPPRIORITY
+
+    - name: comment
+      type: TEXT
+      sourceField: O_ORDERKEY

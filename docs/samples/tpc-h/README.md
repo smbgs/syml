@@ -192,7 +192,7 @@ spec:
 apiVersion: v1.syml.somebugs.com
 kind: Schema
 meta:
-  name: tpc-h-line-item
+  name: tpc-h-order
   type: domain  
   version: 2.17.1
   desc: >

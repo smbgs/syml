@@ -1,0 +1,47 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-region-pg
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Region (asia, europe etc.)
+
+spec:
+
+  target:
+    kind: database
+    provider: postgres
+    type: table
+    spec:
+      database: demo
+      schema: tpch
+      table: region
+
+  source:
+    schema: ../snowflake/region.syml.yml
+
+  fields:
+
+    - name: ID
+      dimension: retain
+      type: GROUP
+      fields:
+
+        - name: region_id
+          constraints: ["pk"]
+          type: SMALLSERIAL
+
+        - name: region_key
+          type: TEXT
+          constraints: ["non-empty"]
+          sourceField: R_REGIONKEY
+
+    - name: name
+      type: TEXT
+      constraints: ["non-empty"]
+      sourceField: R_NAME
+
+    - name: comment
+      type: TEXT
+      sourceField: R_COMMENT

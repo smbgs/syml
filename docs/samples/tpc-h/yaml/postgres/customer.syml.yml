@@ -1,0 +1,98 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-customer-pg
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Customer
+
+spec:
+
+  dest:
+    kind: database
+    provider: postgres
+    type: table
+    spec:
+      database: demo
+      schema: tpch
+      table: customer
+
+  source:
+    schema: ../snowflake/customer.syml.yml
+
+  fields:
+
+    - name: id
+      dimension: retain
+      fields:
+
+        - name: customer_id
+          constraints: ["pk"]
+          type: BIGSERIAL
+
+        - name: customer_key
+          constraints: ["non-empty"]
+          type: TEXT
+          sourceField: C_CUSTKEY
+
+    - name: profile
+      type: GROUP
+      dimension: overwrite
+      sourceField: PROFILE
+
+      fields:
+
+        - name: name
+          type: TEXT
+          constraints: ["non-empty"]
+          sourceField: C_CUSTKEY
+
+        - name: address
+          type: TEXT
+          sourceField: C_ADDRESS
+
+        - name: nation
+          type: GROUP
+
+          relation:
+            target:
+              schema: ./nation.syml.yml
+              field: id
+
+          fields:
+            - name: nation_id
+              type: bigint
+
+              relation:
+                type: foreign-key
+                targetField: nation_id
+                lookup:
+                  via: nation_key
+                  to: nation_id
+
+            - name: nation_key
+              constraints: ["non-null"]
+              sourceField: C_NATIONKEY
+              relation:
+                type: reference
+                targetField: nation_key
+
+        - name: phone
+          type: TEXT
+          sourceField: C_PHONE
+
+        - name: account_balance
+          type: DECIMAL
+          constraints: ["non-null"]
+          sourceField: C_ACCTBAL
+
+    - name: market_segment
+      dimension: overwrite
+      type: TEXT
+      sourceField: C_MKTSEGMENT
+
+    - name: comment
+      dimension: overwrite
+      type: TEXT
+      sourceField: C_COMMENT

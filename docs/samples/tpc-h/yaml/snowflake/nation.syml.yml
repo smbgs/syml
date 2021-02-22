@@ -1,0 +1,43 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-nation
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Nation (country etc.)
+
+spec:
+
+  dest:
+    kind: database
+    provider: snowflake
+    type: table
+    spec:
+      database: DEMO_DB
+      schema: TPC-H
+      table: NATION
+
+  fields:
+
+    - name: NATIONKEY
+      type: TEXT
+      dimension: retain
+      tags: ["pk"]
+
+    - name: NAME
+      dimension: overwrite
+      type: TEXT
+
+    - name: REGIONKEY
+      type: TEXT
+      dimension: overwrite
+      relation:
+        type: reference
+        target:
+          schema: ./region.syml.yml
+          field: R_REGIONKEY
+
+    - name: COMMENT
+      dimension: overwrite
+      type: TEXT

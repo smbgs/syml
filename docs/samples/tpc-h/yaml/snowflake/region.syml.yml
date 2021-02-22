@@ -1,0 +1,31 @@
+apiVersion: syml.somebugs.com/v1
+kind: Schema
+meta:
+  name: tpc-h-region
+  type: dimension
+  version: 2.17.1
+  desc: >
+    Region (asia, europe etc.)
+
+spec:
+
+  dest:
+    kind: database
+    provider: snowflake
+    type: table
+    spec:
+      database: DEMO_DB
+      schema: TPC-H
+      table: REGION
+
+  fields:
+
+    - name: R_REGIONKEY
+      type: TEXT
+      tags: ["pk"]
+
+    - name: R_NAME
+      type: TEXT
+
+    - name: R_COMMENT
+      type: TEXT
