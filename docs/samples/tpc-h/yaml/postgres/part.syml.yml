@@ -9,7 +9,7 @@ meta:
 
 spec:
 
-  dest:
+  target:
     kind: database
     provider: postgres
     type: table

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/docs/docs.iml" filepath="$PROJECT_DIR$/docs/docs.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/syml-core/syml-core.iml" filepath="$PROJECT_DIR$/tools/syml-core/syml-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/syml-monitor/syml-monitor.iml" filepath="$PROJECT_DIR$/tools/syml-monitor/syml-monitor.iml" />
     </modules>
   </component>
 </project>

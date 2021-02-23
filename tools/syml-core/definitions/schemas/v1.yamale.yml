@@ -2,7 +2,7 @@ apiVersion: enum('syml.somebugs.com/v1')
 kind: enum('Schema')
 meta:
   name: str()
-  type: enum('dimension', 'fact')
+  type: enum('dimension', 'fact', 'fieldset')
   version: str()
   desc: str(required=False)
 
@@ -10,7 +10,7 @@ spec: include('fieldBase')
 
 ---
 fieldBase:
-  dest: include('destination', required=False)
+  target: include('target', required=False)
   source: any(include('schemaFieldReference'), list(include('schemaFieldReference')), required=False)
   common: map(required=False)
   type: str(required=False)
@@ -26,8 +26,11 @@ field:
   name: str()
   desc: str(required=False)
   dimension: enum('retain', 'overwrite', 'new-row', 'new-attribute', 'history-table', 'history-embedding', 'combined', required=False)
-  source: include('schemaFieldReference', required=False)
 
+  source: include('schemaFieldReference', required=False)
+  sourceField: str(required=False)
+
+  constraints: list(str(), required=False)
   type: str(required=False)
   tags: list(str(), required=False)
   relation: include('relation', required=False)
@@ -37,15 +40,15 @@ field:
   fields: list(include('field'), required=False)
 
 ---
-destination:
+target:
   kind: enum('database', 'api')
   provider: enum('postgres', 'snowflake')
   type: enum('table', 'view')
-  spec: any(include('destinationSpecTable'))
+  spec: any(include('targetSpecTable'))
 
 
 ---
-destinationSpecTable:
+targetSpecTable:
   type: enum('dimension', 'fact', required=False)
   database: str()
   schema: str()
@@ -55,11 +58,20 @@ destinationSpecTable:
 relation:
   type: enum('foreign-key', 'reference')
   desc: str(required=False)
-  target: include('schemaFieldReference')
+  target: include('schemaFieldReference', required=False)
+
+  lookup: include('relationLookup', required=False)
+  targetField: str(required=False)
+  field: str(required=False) # Unsure
+
+---
+relationLookup:
+  via: str()
+  to: str()
 
 ---
 schemaFieldReference:
   schema: str()
-  field: str()
+  field: str(required=False)
   desc: str(required=False)
 

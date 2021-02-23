@@ -9,7 +9,7 @@ meta:
 
 spec:
 
-  dest:
+  target:
     kind: database
     provider: postgres
     type: table
@@ -40,6 +40,7 @@ spec:
     - name: customer
       type: GROUP
       relation:
+        type: reference
         target:
           schema: ./customer.syml.yml
           field: ID

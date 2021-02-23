@@ -9,7 +9,7 @@ meta:
 
 spec:
 
-  dest:
+  target:
     kind: database
     provider: postgres
     type: table
@@ -43,6 +43,7 @@ spec:
 
     - name: region
       relation:
+        type: reference
         target:
           schema: ./region.syml.yml
           field: ID
@@ -53,11 +54,10 @@ spec:
           type: INTEGER
           relation:
             type: foreign-key
-            kind: many-to-one
             targetField: region_id
             lookup:
               via: region_key
-              group: ID
+              to: region_id
 
         - name: region_key
           type: TEXT
@@ -65,7 +65,6 @@ spec:
           dimension: overwrite
           relation:
             type: reference
-            kind: many-to-one
             target:
               schema: ./region.syml.yml
               field: region_key
