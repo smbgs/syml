@@ -131,10 +131,9 @@ spec:
   
 ```
 
-
 ### Part  supplier
 ```yaml
-apiVersion: v1.syml.somebugs.com
+gapiVersion: v1.syml.somebugs.com
 kind: Schema
 meta:
   name: tpc-h-part-supplier
@@ -161,7 +160,6 @@ spec:
     tags: ["pk"]
     relation:
       type: foreign-key
-    tags: ["logical"]
     target:
       schema: @md/schema/tpc-h-part
       field: P_PARTKEY

@@ -2,9 +2,16 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/tools/ci/ci.iml" filepath="$PROJECT_DIR$/tools/ci/ci.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/cli/cli.iml" filepath="$PROJECT_DIR$/tools/cli/cli.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/core/core.iml" filepath="$PROJECT_DIR$/tools/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/db-analytics/db-analytics.iml" filepath="$PROJECT_DIR$/tools/db-analytics/db-analytics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/db-reverser/db-reverser.iml" filepath="$PROJECT_DIR$/tools/db-reverser/db-reverser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/db-seeder/db-seeder.iml" filepath="$PROJECT_DIR$/tools/db-seeder/db-seeder.iml" />
       <module fileurl="file://$PROJECT_DIR$/docs/docs.iml" filepath="$PROJECT_DIR$/docs/docs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tools/syml-core/syml-core.iml" filepath="$PROJECT_DIR$/tools/syml-core/syml-core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tools/syml-monitor/syml-monitor.iml" filepath="$PROJECT_DIR$/tools/syml-monitor/syml-monitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/k8s-operator/k8s-operator.iml" filepath="$PROJECT_DIR$/tools/k8s-operator/k8s-operator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/monitor/monitor.iml" filepath="$PROJECT_DIR$/tools/monitor/monitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/openapi-bridge/openapi-bridge.iml" filepath="$PROJECT_DIR$/tools/openapi-bridge/openapi-bridge.iml" />
     </modules>
   </component>
 </project>
