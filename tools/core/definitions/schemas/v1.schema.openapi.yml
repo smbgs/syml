@@ -1,0 +1,147 @@
+openapi: 3.1.0
+
+info:
+  version: 0.0.1
+  title: SYML OpenAPI Schemas Specification
+  contact:
+    name: SYML 1.0
+    url: "https://github.com/smbgs/syml/tree/main/tools/core"
+    email: syml@somebugs.com
+
+components:
+  schemas:
+
+    Schema:
+      type: object
+      required:
+        - apiVersion
+        - kind
+        - meta
+        - spec
+      properties:
+        apiVersion:
+          type: string
+          pattern: "[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+        kind:
+          enum:
+            - Schema
+        meta:
+          $ref: '#/components/schemas/SchemaMeta'
+        spec:
+          $ref: '#/components/schemas/SchemaSpec'
+
+    SchemaMeta:
+      type: object
+      required:
+        - name
+        - type
+        - version
+        - desc
+      properties:
+        name:
+          type: string
+        type:
+          enum: ["dimension", "fact", "fieldset"]
+        version:
+          $ref: "#/components/schemas/Version"
+        desc:
+          type: string
+
+    SchemaSpec:
+      $ref: "#/components/schemas/Fields"
+
+    Fields:
+      type: array
+      items:
+        $ref: "#/components/schemas/Field"
+
+    Field:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          oneOf:
+            - enum: ["GROUP"]
+            - type: string
+            # TODO: add discriminators
+
+        target:
+          $ref: "#/components/schemas/Target"
+
+        source:
+          oneOf:
+            - $ref: "#/components/schemas/FieldReference"
+            - type: array
+              items:
+                $ref: "#/components/schemas/FieldReference"
+
+        relation:
+          $ref: "#/components/schemas/Relation"
+
+        constraints:
+          type: array
+          items:
+            type: string #TODO: enum?
+
+        tags:
+          type: array
+          items:
+            type: string # TODO: min amount?
+
+        hints: # TODO: more strict?
+          type: object
+          additionalProperties: { }
+
+        dimension:
+          enum:
+            - retain
+            - overwrite
+            - new-row
+            - new-attribute
+            - history-table
+            - history-embedding
+            - combined
+
+        fields:
+          $ref: "#/components/schemas/Fields"
+
+    FieldReference:
+      type: object
+      properties:
+        schema:
+          type: string
+        field:
+          type: string
+
+    Target:
+      type: object
+
+    Relation:
+      type: object
+      properties:
+        type:
+          enum:
+            - foreign-key
+            - reference
+        target:
+          $ref: "#/components/schemas/FieldReference"
+
+        lookup:
+          type: object
+          required:
+            - via
+            - to
+          properties:
+            via:
+              type: string
+            to:
+              type: string
+
+    # TODO: move out
+    Version:
+      type: string
+      pattern: "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+
+paths: {}
+

@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 yamale = "*"
+openapi_spec_validator = "*"
+openapi_schema_validator = "*"
 
 [dev-packages]
 
