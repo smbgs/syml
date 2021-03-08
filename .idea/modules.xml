@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/tools/cli/cli.iml" filepath="$PROJECT_DIR$/tools/cli/cli.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/core/core.iml" filepath="$PROJECT_DIR$/tools/core/core.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/db-analytics/db-analytics.iml" filepath="$PROJECT_DIR$/tools/db-analytics/db-analytics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/db-pulse/db-pulse.iml" filepath="$PROJECT_DIR$/tools/db-pulse/db-pulse.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/db-reverser/db-reverser.iml" filepath="$PROJECT_DIR$/tools/db-reverser/db-reverser.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/db-seeder/db-seeder.iml" filepath="$PROJECT_DIR$/tools/db-seeder/db-seeder.iml" />
       <module fileurl="file://$PROJECT_DIR$/docs/docs.iml" filepath="$PROJECT_DIR$/docs/docs.iml" />
