@@ -5,9 +5,12 @@ name = "pypi"
 
 [packages]
 sqlalchemy = "==1.4.0b3"
+snowflake-sqlalchemy = "*"
+psycopg2-binary = "==2.8.6"
 asyncpg = "*"
 pyyaml = "*"
 humanize = "*"
+
 
 [dev-packages]
 

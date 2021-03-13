@@ -1,0 +1,21 @@
+# TODO: proper schema
+spec:
+  mappings:
+
+    # Facebook
+
+    - source:
+        schema: staging
+        table: staging_test1
+      destination:
+        schema: public
+        table: test1
+
+    - source:
+        schema: staging
+        table: staging_test1
+      destination:
+        schema: public
+        table: test2
+
+
