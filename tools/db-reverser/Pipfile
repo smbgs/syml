@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pip = "*"
 sqlalchemy = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
