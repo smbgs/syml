@@ -3,12 +3,9 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
-[[include]]
-source = "../core/Pipfile"
-
 [packages]
-syml_core = {editable = true, path = "./../core"}
 fire = "*"
+syml-core = {editable = true, path = "./../core"}
 
 [dev-packages]
 

@@ -14,4 +14,9 @@ class SymlDBReverserService(LocalServiceBase):
         objects_names,
         objects_types
     ):
-        return ['todo db reverse']
+        return dict(
+            connection_string=connection_string,
+            schemas=schemas,
+            objects_names=objects_names,
+            objects_types=objects_types,
+        )
