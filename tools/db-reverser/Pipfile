@@ -4,10 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pip = "*"
 sqlalchemy = "*"
+syml_core = {editable = true, path = "./../core"}
 
 [dev-packages]
+pip = "*"
 
 [requires]
 python_version = "3.9"

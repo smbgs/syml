@@ -9,14 +9,17 @@ from threading import Thread
 from typing import Dict
 from uuid import uuid4
 
+import yaml
+import subprocess
 
 class LocalServiceBase:
     logger = logging.getLogger('LocalServiceBase')
 
     # TODO: consider making this configurable
+    SYML_ENVIRONMENTS_PATH = '~/.syml/environments.yaml'
     UNIX_SOCKET_PATH = '~/.syml/sockets/${service}.sock'
 
-    local_executable: str
+    local_executable: Path
 
     def __init__(self, name):
         self._name = name
@@ -71,7 +74,7 @@ class LocalServiceBase:
 
     @classmethod
     def resolve_service_path(cls, name: str):
-        return Template(cls.UNIX_SOCKET_PATH).substitute({"service": name})
+        return Path(Template(cls.UNIX_SOCKET_PATH).substitute({"service": name})).expanduser().resolve()
 
     async def serve(self, path):
         server = await asyncio.start_unix_server(
@@ -88,16 +91,37 @@ class LocalServiceBase:
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         asyncio.run(self.serve(path))
 
+    def get_pipenv_python_bin(self, executable_path):
+        return subprocess.run([
+            'pipenv',
+            '--py',
+            executable_path
+        ])
+
     def start_local_server(self):
         # TODO: if non-local shortcut should be conditional
         # TODO: docker and remote versions of this might be easy to do as well
+
+        # env_config_path = Path(self.SYML_ENVIRONMENTS_PATH).expanduser().resolve()
+        # if env_config_path.exists():
+        #     with open(str(env_config_path), 'r+') as f:
+        #         env_config = yaml.load(f, Loader=yaml.SafeLoader)
+        #         python_bin = env_config.get(self._name)
+        #         if not python_bin:
+        #
+        # else:
+
+
         self.logger.debug('Starting local service %s', self._name)
-        self.local_server = Popen([
-            'pipenv',
-            'run',
-            'python',
-            str(self.local_executable),
-        ])
+        self.local_server = Popen(
+            cwd=str(self.local_executable.parent),
+            args=[
+                'pipenv',
+                'run',
+                'python',
+                str(self.local_executable),
+            ],
+        )
         self.logger.debug('Started local service %s', self._name)
 
 
@@ -142,7 +166,7 @@ class CLIClient(LocalServiceBase):
                     path=self.resolve_service_path(self._name)
                 )
                 break
-            except ConnectionRefusedError:
+            except (ConnectionRefusedError, FileNotFoundError):
                 if had_failure:
                     self.logger.debug('Unable to connect... retrying')
                 else:

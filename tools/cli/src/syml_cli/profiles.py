@@ -8,14 +8,14 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
     """
 
     def __init__(self):
-        self.profiles = SymlProfileClient()
+        self._profiles = SymlProfileClient()
         super().__init__()
 
     def list(self):
         """
         Lists existing profiles in the profile names
         """
-        yield self.profiles.list()
+        yield self._profiles.list()
         # TODO: implement this
 
     def create(self, profile_name: str, base=None):

@@ -1,17 +1,10 @@
 import logging
 
-import sys
-
 import fire
 
-from syml_cli.common import SYML_CORE_PATH, SymlProfileBasedCLI, \
-    SymlServiceBasedCLI
+from syml_cli.common import SymlProfileBasedCLI, SymlServiceBasedCLI
 
 if __name__ == '__main__':
-
-    # TODO: in binary package mode this should be different
-    # Adding core library to python path
-    sys.path.insert(0, str(SYML_CORE_PATH / 'src'))
 
     from syml_cli.system import SymlSystemCLI
     from syml_cli.db_reverser import SymlDBReverserCLI

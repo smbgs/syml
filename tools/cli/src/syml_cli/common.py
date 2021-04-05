@@ -13,10 +13,10 @@ class SymlCLI:
 
 class SymlServiceBasedCLI(SymlCLI):
 
-    to_finalize = []
+    _to_finalize = []
 
     def __init__(self):
-        SymlServiceBasedCLI.to_finalize.append(self)
+        SymlServiceBasedCLI._to_finalize.append(self)
 
     def _finalize(self):
         for c in self.__dict__.values():
@@ -25,7 +25,7 @@ class SymlServiceBasedCLI(SymlCLI):
 
     @classmethod
     def _finalize_all(cls):
-        for it in cls.to_finalize:
+        for it in cls._to_finalize:
             it._finalize()
 
 

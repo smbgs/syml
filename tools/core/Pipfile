@@ -4,11 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+pyyaml = "*"
 yamale = "*"
 openapi_spec_validator = "*"
 openapi_schema_validator = "*"
 
 [dev-packages]
+pipenv = "*"
 
 [requires]
 python_version = "3.9"

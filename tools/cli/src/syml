@@ -1,6 +1,9 @@
 #!/bin/bash
 
 DIR="$(dirname "$(readlink -f "$0")")"
-cd "$DIR"
+cd "$DIR" || exit
 
-pipenv run python syml.py "$@"
+
+#pipenv sync
+pipenv run python ./syml.py "$@" || pipenv sync
+
