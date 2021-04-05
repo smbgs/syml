@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 fire = "*"
 syml-core = {editable = true, path = "./../core"}
+pyyaml = "*"
 
 [dev-packages]
 

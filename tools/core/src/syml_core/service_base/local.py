@@ -13,6 +13,9 @@ import yaml
 import subprocess
 
 class LocalServiceBase:
+    # TODO: we need to add support for data "shapes" similar to graphql
+    # so that we can calculate and return only things that client asked for
+
     logger = logging.getLogger('LocalServiceBase')
 
     # TODO: consider making this configurable
@@ -60,7 +63,10 @@ class LocalServiceBase:
 
                 # TODO: dispatch command and handle it
                 # TODO: handle internal \n in the payload, base64?
-                writer.write(json.dumps(response).encode())
+                writer.write(json.dumps(
+                    response,
+                    default=lambda o: o.json() if hasattr(o, 'json') else str(o)
+                ).encode())
                 writer.write('\n'.encode())
 
                 logging.debug("sending response %s", response)
@@ -74,7 +80,9 @@ class LocalServiceBase:
 
     @classmethod
     def resolve_service_path(cls, name: str):
-        return Path(Template(cls.UNIX_SOCKET_PATH).substitute({"service": name})).expanduser().resolve()
+        return Path(
+            Template(cls.UNIX_SOCKET_PATH).substitute({"service": name})
+        ).expanduser().resolve()
 
     async def serve(self, path):
         server = await asyncio.start_unix_server(
@@ -229,7 +237,10 @@ class CLIClient(LocalServiceBase):
 
         logging.debug("sending command %s %s", name, arguments)
         command = {**arguments, "name": name}
-        self.writer.write(json.dumps(command).encode())
+        self.writer.write(json.dumps(
+            command,
+            default=lambda o: o.json() if hasattr(o, 'json') else str(o)
+        ).encode())
         self.writer.write('\n'.encode())
         await self.writer.drain()
 

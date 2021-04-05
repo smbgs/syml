@@ -1,3 +1,7 @@
+import sys
+
+import yaml
+
 from syml_cli.clients.profiles import SymlProfileClient
 from syml_cli.common import SymlServiceBasedCLI
 
@@ -15,8 +19,11 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         """
         Lists existing profiles in the profile names
         """
-        yield self._profiles.list()
-        # TODO: implement this
+        yaml.dump(
+            self._profiles.list()['data']['items'],
+            sys.stdout, sort_keys=False
+        )
+        # TODO: implement proper console output
 
     def create(self, profile_name: str, base=None):
         """
@@ -25,7 +32,10 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         :param profile_name: profile name
         :param base: optional profile name to copy settings from
         """
-        # TODO: implement this
+        yaml.dump(self._profiles.create(
+            profile_name=profile_name,
+            base=base
+        ), sys.stdout, sort_keys=False)
 
     def delete(self, profile_name: str, confirm=False):
         """
@@ -37,6 +47,9 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         """
         # TODO: learn how to use arg aliases in python.fire
         # TODO: consider python-prompt-toolkit
+        yaml.dump(self._profiles.delete(
+            profile_name=profile_name,
+        ), sys.stdout, sort_keys=False)
 
     def alias(self, profile_name: str, alias_name, alias_val=None):
         """
@@ -48,4 +61,8 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         :param alias_name: alias name (without @)
         :param alias_val: alias value (any string)
         """
-        # TODO: implement this
+        yaml.dump(self._profiles.alias(
+            profile_name=profile_name,
+            alias_name=alias_name,
+            alias_val=alias_val,
+        ), sys.stdout, sort_keys=False)
