@@ -18,6 +18,7 @@ stats_columns = [
 @dataclass
 class TableStats:
     row_estimate: int
+    table_bytes: int
     total_bytes: int
     index_bytes: int
     toast_bytes: int
@@ -102,22 +103,37 @@ async def compare_source_dest(
             destination_table=destination['table'],
             source_stats=TableStats(
                 row_estimate=source_stats.row_estimate,
+                table_bytes=source_stats.total_bytes - source_stats.index_bytes,
                 total_bytes=source_stats.total_bytes,
                 index_bytes=source_stats.index_bytes,
                 toast_bytes=source_stats.toast_bytes,
             ),
             destination_stats=TableStats(
                 row_estimate=destination_stats.row_estimate,
+                table_bytes=
+                destination_stats.total_bytes - destination_stats.index_bytes,
+
                 total_bytes=destination_stats.total_bytes,
                 index_bytes=destination_stats.index_bytes,
                 toast_bytes=destination_stats.toast_bytes
 
             ),
             difference=TableStats(
-                row_estimate=source_stats.row_estimate - destination_stats.row_estimate,
-                total_bytes=source_stats.total_bytes - destination_stats.total_bytes,
-                index_bytes=source_stats.index_bytes - destination_stats.index_bytes,
-                toast_bytes=source_stats.toast_bytes - destination_stats.toast_bytes,
+                row_estimate=
+                source_stats.row_estimate - destination_stats.row_estimate,
+
+                table_bytes=
+                (source_stats.total_bytes - source_stats.index_bytes) -
+                (destination_stats.total_bytes - destination_stats.index_bytes),
+
+                total_bytes=
+                source_stats.total_bytes - destination_stats.total_bytes,
+
+                index_bytes=
+                source_stats.index_bytes - destination_stats.index_bytes,
+
+                toast_bytes=
+                source_stats.toast_bytes - destination_stats.toast_bytes,
             )
         )
 
