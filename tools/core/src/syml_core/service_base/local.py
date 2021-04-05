@@ -11,13 +11,16 @@ from uuid import uuid4
 
 
 class LocalServiceBase:
+    logger = logging.getLogger('LocalServiceBase')
+
     # TODO: consider making this configurable
     UNIX_SOCKET_PATH = '~/.syml/sockets/${service}.sock'
 
-    logger = logging.getLogger('LocalServiceBase')
+    local_executable: str
 
     def __init__(self, name):
         self._name = name
+        self.local_server = None
 
     async def on_client_connected(
         self,
@@ -57,15 +60,18 @@ class LocalServiceBase:
                 writer.write(json.dumps(response).encode())
                 writer.write('\n'.encode())
 
+                logging.debug("sending response %s", response)
+
                 await writer.drain()
             except Exception as e:
-                self.logger.exception("oh no")
+                self.logger.exception("oh no", e)
 
     async def cmd_disconnect(self):
         pass
 
-    def resolve_service_path(self, name: str):
-        return Template(self.UNIX_SOCKET_PATH).substitute({"service": name})
+    @classmethod
+    def resolve_service_path(cls, name: str):
+        return Template(cls.UNIX_SOCKET_PATH).substitute({"service": name})
 
     async def serve(self, path):
         server = await asyncio.start_unix_server(
@@ -81,6 +87,18 @@ class LocalServiceBase:
         path = self.resolve_service_path(self._name)
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         asyncio.run(self.serve(path))
+
+    def start_local_server(self):
+        # TODO: if non-local shortcut should be conditional
+        # TODO: docker and remote versions of this might be easy to do as well
+        self.logger.debug('Starting local service %s', self._name)
+        self.local_server = Popen([
+            'pipenv',
+            'run',
+            'python',
+            str(self.local_executable),
+        ])
+        self.logger.debug('Started local service %s', self._name)
 
 
 class CLIClient(LocalServiceBase):
@@ -98,33 +116,23 @@ class CLIClient(LocalServiceBase):
         self.loop: AbstractEventLoop = loop or self.shared_loop
         self.reader: StreamReader = None
         self.writer: StreamWriter = None
+        self.connecting = False
         self.active = False
         self.reader_task: Task = None
-        self.local_server = None
         self.pending_commands = []
         self.active_commands: Dict[str, Future] = {}
 
         def commands():
             asyncio.set_event_loop(self.loop)
-            if not self.loop.is_running():
-                self.loop.run_forever()
+            if not self.shared_loop.is_running():
+                logging.debug("Starting thread loop")
+                self.shared_loop.run_forever()
+            logging.debug("Thread loop stopped")
 
         t = Thread(target=commands)
         t.start()
 
-    async def connect(self, local_executable=None):
-
-        # TODO: if non-local shortcut should be conditional
-        # TODO: docker and remote versions of this might be easy to do as well
-        self.logger.debug('Starting local service %s', self._name)
-        if local_executable:
-            self.local_server = Popen([
-                'pipenv',
-                'run',
-                'python',
-                str(local_executable),
-            ])
-
+    async def connect(self):
         self.logger.debug('Connecting to %s...', self._name)
 
         had_failure = False
@@ -137,7 +145,9 @@ class CLIClient(LocalServiceBase):
             except ConnectionRefusedError:
                 if had_failure:
                     self.logger.debug('Unable to connect... retrying')
-                await asyncio.sleep(1)
+                else:
+                    self.start_local_server()
+                await asyncio.sleep(0.25)
                 had_failure = True
 
         self.active = True
@@ -160,11 +170,13 @@ class CLIClient(LocalServiceBase):
 
     def disconnect(self):
         # TODO: shutdown command for local case (server)
-        self.wrapped_await(self.command({'type': 'disconnect'}))
+        #self.wrapped_await(self.command({'type': 'disconnect'}))
 
         self.active = False
         if self.reader_task:
+            self.writer.close()
             self.reader_task.cancel()
+            self.logger.debug("closed the writer and reader")
 
         if self.local_server:
             self.logger.debug("Terminating the local command server process %s",
@@ -177,6 +189,9 @@ class CLIClient(LocalServiceBase):
     async def command(self, name, arguments: dict = None, pending=None):
 
         pending = pending or Future()
+
+        if not self.connecting:
+            await self.connect()
 
         if not self.active:
             self.pending_commands.append((name, arguments, pending))
@@ -209,7 +224,18 @@ class CLIClient(LocalServiceBase):
         return wrapper
 
     def finalize(self):
+        self.logger.debug("finalizing %s", self._name)
         self.disconnect()
+
         CLIClient.shared_loop_ref_cnt -= 1
         if CLIClient.shared_loop_ref_cnt == 0:
-            CLIClient.shared_loop.stop()
+            self.logger.debug("stopping event loop")
+
+            async def stop():
+                CLIClient.shared_loop.stop()
+
+            asyncio.run_coroutine_threadsafe(stop(), self.loop)
+
+        self.logger.debug("finalized %s", self._name)
+
+
