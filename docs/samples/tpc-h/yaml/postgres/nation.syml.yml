@@ -25,6 +25,7 @@ spec:
 
     - name: id
       dimension: retain
+      type: GROUP
 
       fields:
 
@@ -42,6 +43,7 @@ spec:
       constraints: ["non-empty"]
 
     - name: region
+      type: GROUP
       relation:
         type: reference
         target:

@@ -2,7 +2,6 @@ import asyncio
 import json
 import logging
 from asyncio import StreamWriter, StreamReader, Task, Future, AbstractEventLoop
-from dataclasses import dataclass
 from threading import Thread
 from typing import Dict
 
