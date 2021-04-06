@@ -48,7 +48,8 @@ class LocalServiceBase:
                 callable_command = getattr(self, f'cmd_{command.name}')
 
                 # TODO: handle generators
-                response: SymlServiceResponse = await callable_command(**command)
+                response: SymlServiceResponse = await callable_command(command)
+                response.command = command
 
                 writer.write(response.jsonb())
                 writer.write('\n'.encode())

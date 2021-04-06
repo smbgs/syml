@@ -20,7 +20,9 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         Lists existing profiles in the profile names
         """
         yaml.dump(
-            self._profiles.list()['data']['items'],
+            self._profiles.list(
+                shape=[['items', 'name', ['meta', 'updated_at']]]
+            )['data']['items'],
             sys.stdout, sort_keys=False
         )
         # TODO: implement proper console output
@@ -33,8 +35,10 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         :param base: optional profile name to copy settings from
         """
         yaml.dump(self._profiles.create(
-            profile_name=profile_name,
-            base=base
+            args=dict(
+                profile_name=profile_name,
+                base=base
+            ),
         ), sys.stdout, sort_keys=False)
 
     def delete(self, profile_name: str, confirm=False):

@@ -3,25 +3,35 @@ import typing
 from dataclasses import dataclass
 from uuid import uuid4
 
-Shape = typing.List[typing.Union[str, typing.List]]
 T = typing.TypeVar('T')
+
+Shape = typing.List[typing.Union[str, typing.List]]
+Data = typing.Union[typing.Dict, typing.List]
 
 
 def shape_data(data: typing.Dict, shape: Shape = None):
     if shape is None:
         shape = data.keys()
 
-    result = {}
-    for field in shape:
-        if type(field) == str:
-            result[field] = data.get(field)
-        else:
-            result[field[0]] = shape_data(data.get(field), field[1:])
+    if isinstance(data, dict):
+        result = {}
+        for field in shape:
+            if type(field) == str:
+                result[field] = data.get(field)
+            else:
+                result[field[0]] = shape_data(data.get(field[0]), field[1:])
+        return result
 
-    return result
+    elif isinstance(data, list):
+        return [shape_data(it, shape) for it in data]
+    else:
+        return data
 
 
-class Serializable(dataclass):
+class Serializable:
+
+    def __init__(self, **kwargs):
+        pass
 
     @classmethod
     def parse(cls, data: typing.Union[str, bytes]):
@@ -32,6 +42,9 @@ class Serializable(dataclass):
             self.json(),
             default=lambda o: o.json() if hasattr(o, 'json') else str(o)
         ).encode()
+
+    def json(self):
+        raise NotImplementedError
 
 
 @dataclass
@@ -52,6 +65,7 @@ class SymlServiceCommand(typing.Generic[T], Serializable):
         errors=True,
         cid: str = None,
     ):
+        super().__init__()
         self.name = name
         self.cid = cid or uuid4().hex
         self.args = args
@@ -66,20 +80,21 @@ class SymlServiceCommand(typing.Generic[T], Serializable):
 
 @dataclass
 class SymlServiceResponse(Serializable):
-    data: typing.Dict
+    data: Data
     errors: typing.List[typing.Dict]
     info: typing.List[typing.Dict]
     rid: str
-    cid: str
+    cid: str = None
 
     def __init__(
         self,
-        data: typing.Dict = None,
+        data: Data = None,
         errors: typing.List[typing.Dict] = None,
         info: typing.List[typing.Dict] = None,
         rid: str = None,
         command: SymlServiceCommand = None,
     ):
+        super().__init__()
         self.data = data
         self.errors = errors
         self.info = info
@@ -93,6 +108,8 @@ class SymlServiceResponse(Serializable):
 
         if self.info and self.command and self.command.info:
             response['info'] = self.info
+
+        print("Shaping/...", self.command)
 
         if self.data:
             if self.command and self.command.shape:

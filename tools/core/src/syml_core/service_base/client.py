@@ -72,11 +72,11 @@ class CLIClient(LocalServiceBase):
             raw_command = await self.reader.readline()
             response = json.loads(raw_command)
             self.logger.debug("received serv response %s", response)
-            rid = response.get('rid')
-            if rid in self.active_commands:
-                self.active_commands[rid].set_result(response)
-                self.logger.debug("setting result %s %s", rid, response)
-                del self.active_commands[rid]
+            cid = response.get('cid')
+            if cid in self.active_commands:
+                self.active_commands[cid].set_result(response)
+                self.logger.debug("setting result %s %s", cid, response)
+                del self.active_commands[cid]
 
     def disconnect(self):
         # TODO: shutdown command for local case (server)
@@ -99,7 +99,7 @@ class CLIClient(LocalServiceBase):
     async def command(
         self,
         name,
-        arguments: dict = None,
+        args: dict = None,
         shape=None,
         info=True,
         errors=True,
@@ -112,24 +112,26 @@ class CLIClient(LocalServiceBase):
             await self.connect()
 
         if not self.active:
-            self.pending_commands.append((name, arguments, pending))
+            self.pending_commands.append((name, args, pending))
             return pending
 
-        if arguments is None:
-            arguments = {}
+        if args is None:
+            args = {}
 
         command = SymlServiceCommand(
             name=name,
             # TODO: handle this case
-            arguments=dataclass(arguments),
+            args=args,
             shape=shape,
             info=info,
             errors=errors,
         )
 
+        print(command)
+
         self.active_commands[command.cid] = pending
 
-        logging.debug("sending command %s %s", name, arguments)
+        logging.debug("sending command %s %s", name, command)
 
         self.writer.write(command.jsonb())
         self.writer.write('\n'.encode())
@@ -140,9 +142,9 @@ class CLIClient(LocalServiceBase):
     def wrapped_await(self, task) -> SymlServiceResponse:
         return asyncio.run_coroutine_threadsafe(task, self.loop).result()
 
-    def __getattr__(self, item):
+    def __getattr__(self, name):
         async def async_wrapper(**kwargs):
-            return await (await self.command(item, **kwargs))
+            return await (await self.command(name=name, **kwargs))
 
         def wrapper(**kwargs):
             return self.wrapped_await(async_wrapper(**kwargs))
