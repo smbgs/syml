@@ -1,5 +1,5 @@
 from syml_cli.common import SYML_CLI_PATH
-from syml_core.service_base.local import CLIClient
+from syml_core.service_base.client import CLIClient
 
 
 class SymlProfileClient(CLIClient):

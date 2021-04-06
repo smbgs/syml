@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 sqlalchemy = "*"
+psycopg2-binary = "*"
 syml-core = {editable = true, path = "./../core"}
 
 [dev-packages]
