@@ -10,11 +10,6 @@ class TestYaml(TestCase):
     spec_path = TOOLS_ROOT / 'schemas/specs/v1.schema.openapi.yml'
     samples_path = SYML_ROOT / 'docs/samples/tpc-h/yaml/'
 
-    # def runTest(self):
-    #     validator = Validator(self.spec_path)
-    #     validated = validator.validate_spec()
-    #     print(validated)
-
     def test_spec_loading(self):
         spec = Spec(str(self.spec_path))
         self.assertEqual(spec.body.get('openapi'), '3.1.0')

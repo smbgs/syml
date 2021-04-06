@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import typing
 from asyncio import StreamWriter, StreamReader, Task, Future, AbstractEventLoop
 from threading import Thread
 from typing import Dict
@@ -147,6 +148,25 @@ class CLIClient(LocalServiceBase):
             return self.wrapped_await(async_wrapper(**kwargs))
 
         return wrapper
+
+    def sync_command(
+        self,
+        name: str,
+        args: dict = None,
+        shape: typing.List = None,
+        info=True,
+        errors=True,
+    ):
+        async def async_wrapper(**kwargs):
+            return await (await self.command(**kwargs))
+
+        return self.wrapped_await(async_wrapper(
+            name=name,
+            args=args,
+            shape=shape,
+            info=info,
+            errors=errors,
+        ))
 
     def finalize(self):
         self.logger.debug("finalizing %s", self._name)

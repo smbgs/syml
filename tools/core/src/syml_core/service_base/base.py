@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import subprocess
+import traceback
 from asyncio.streams import StreamReader, StreamWriter
 from inspect import signature
 from pathlib import Path
@@ -55,7 +56,21 @@ class LocalServiceBase:
                     command.args = args_type(**command.args)
 
                 # TODO: handle generators
-                response: SymlServiceResponse = await callable_command(command)
+                try:
+                    response: SymlServiceResponse =\
+                        await callable_command(command)
+                except Exception as e:
+                    response = SymlServiceResponse(
+                        data=dict(),
+                        errors=[
+                            dict(message="unhandled exception while "
+                                         "processing command",
+                                 exception=e,
+                                 trace=traceback.format_exc().splitlines()
+                            )
+                        ]
+                    )
+
                 response.command = command
 
                 writer.write(response.jsonb())
