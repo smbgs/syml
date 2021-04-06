@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fff4ed0e5fed8fa41bcd972b6ab1415f5e90a684aa8da4cc076160e43b3bcf52"
+            "sha256": "fd868750a6bd8d3cfd7c597215373472353f6e92a1788ade52c6ca0ffbc6e6f8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -145,6 +145,10 @@
             ],
             "index": "pypi",
             "version": "==1.4.5"
+        },
+        "syml-core": {
+            "editable": true,
+            "path": "./../core"
         }
     },
     "develop": {}

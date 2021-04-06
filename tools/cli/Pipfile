@@ -7,6 +7,8 @@ name = "pypi"
 fire = "*"
 syml-core = {editable = true, path = "./../core"}
 pyyaml = "*"
+colorama = "*"
+rich = "*"
 
 [dev-packages]
 
