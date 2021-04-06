@@ -71,13 +71,14 @@ class SymlDBReverserCLI(SymlServiceBasedCLI):
                 title_style='bold white reverse',
                 show_header=True,
                 header_style="bold white",
+                expand=True,
                 box=box.SQUARE
             )
 
-            table.add_column(" :key:", justify="center", width=3)
+            table.add_column(" :key:", justify="center", max_width=3)
             table.add_column("Name", style="dim", min_width=30)
             table.add_column("Type", justify="left", min_width=15)
-            table.add_column("N", justify="right")
+            table.add_column("N", justify="center", max_width=1)
             table.add_column("Reference", justify="right", min_width=20)
 
             for field in manifest:
@@ -90,7 +91,10 @@ class SymlDBReverserCLI(SymlServiceBasedCLI):
 
                     field['type'],
                     "✔️" if 'nullable' in field.get('tags', []) else "",
-                    field['reference']['table'] if 'reference' in field else "",
+
+                    f"{field['reference']['table']}.{field['reference']['column']}"
+                    if 'reference' in field else "",
+
                     style="#cccccc"
                 )
                 # yaml.dump(field, sys.stdout, sort_keys=False)

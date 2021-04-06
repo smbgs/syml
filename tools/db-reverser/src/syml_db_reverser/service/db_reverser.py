@@ -66,7 +66,6 @@ class SymlDBReverserService(LocalServiceBase):
                 column_info = {
                     'name': str(column.name),
                     'type': str(column.type),
-
                 }
 
                 tags = set()
