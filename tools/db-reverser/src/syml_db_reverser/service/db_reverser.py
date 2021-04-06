@@ -1,9 +1,9 @@
-from os import getenv
+from sqlalchemy import MetaData, create_engine, ForeignKey
 
-from syml_core.service_base.local import LocalServiceBase
-from sqlalchemy import MetaData, create_engine, ForeignKeyConstraint, ForeignKey
-
-from syml_core.service_base.protocol import SymlServiceResponse
+from syml_core.service_base.base import LocalServiceBase
+from syml_core.service_base.protocol import SymlServiceResponse, \
+    SymlServiceCommand
+from syml_db_reverser.service.parameters import ReverseUsingAlchemy
 
 
 class SymlDBReverserService(LocalServiceBase):
@@ -12,13 +12,12 @@ class SymlDBReverserService(LocalServiceBase):
         # TODO: this should not be a service, probably?
         super().__init__('db-reverser')
 
-    async def cmd_alchemy(
-        self,
-        connection_string,
-        schemas,
-        objects_names,
-        objects_types,
-    ):
+    async def cmd_alchemy(self, cmd: SymlServiceCommand[ReverseUsingAlchemy]):
+
+        connection_string = cmd.args.connection_string
+        schemas = cmd.args.schemas
+        objects_names = cmd.args.objects_names
+        objects_types = cmd.args.objects_types
 
         if connection_string == '@postgres':
             connection_string = "postgresql://postgres:password@localhost:5432/symltest"

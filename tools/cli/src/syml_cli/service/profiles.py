@@ -2,8 +2,12 @@ from datetime import datetime
 from pathlib import Path
 
 import yaml
-from syml_core.service_base.local import LocalServiceBase
-from syml_core.service_base.protocol import SymlServiceResponse
+
+from syml_cli.service.parameters import CreateProfile, ListProfiles, \
+    DeleteProfile, ProfileSetAlias
+from syml_core.service_base.base import LocalServiceBase
+from syml_core.service_base.protocol import SymlServiceResponse, \
+    SymlServiceCommand
 
 
 class SymlProfileService(LocalServiceBase):
@@ -17,7 +21,7 @@ class SymlProfileService(LocalServiceBase):
     def __init__(self):
         super().__init__('profiles')
 
-    async def cmd_list(self):
+    async def cmd_list(self, cmd: SymlServiceCommand[ListProfiles]):
         await self.ensure()
 
         items = []
@@ -40,7 +44,10 @@ class SymlProfileService(LocalServiceBase):
             )
         )
 
-    async def cmd_create(self, profile_name: str, base=None):
+    async def cmd_create(self, cmd: SymlServiceCommand[CreateProfile]):
+
+        base = cmd.args.base
+        profile_name = cmd.args.profile_name
 
         use_default = base is None
 
@@ -75,10 +82,15 @@ class SymlProfileService(LocalServiceBase):
 
         return self.store_profile_manifest(profile_name, base_profile_manifest)
 
-    async def cmd_delete(self, profile_name: str, confirm=False):
+    async def cmd_delete(self, cmd: SymlServiceCommand[DeleteProfile]):
         raise NotImplementedError
 
-    async def cmd_alias(self, profile_name: str, alias_name, alias_val=None):
+    async def cmd_alias(self, cmd: SymlServiceCommand[ProfileSetAlias]):
+
+        profile_name = cmd.args.profile_name
+        alias_name = cmd.args.alias_name
+        alias_val = cmd.args.alias_val
+
         manifest = self.load_profile_manifest(profile_name)
 
         if isinstance(manifest, SymlServiceResponse):
@@ -120,7 +132,11 @@ class SymlProfileService(LocalServiceBase):
     async def ensure(self):
         default_path = self.resolve_profile_path(self.DEFAULT_PROFILE_NAME)
         if not default_path.exists():
-            await self.cmd_create(self.DEFAULT_PROFILE_NAME)
+            await self.cmd_create(
+                SymlServiceCommand(
+                    args=CreateProfile(profile_name=self.DEFAULT_PROFILE_NAME)
+                )
+            )
 
     def resolve_profile_path(self, profile_name):
         return Path(self.DEFAULT_PROFILES_STORAGE_PATH / profile_name)
