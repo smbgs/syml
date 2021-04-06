@@ -1,12 +1,12 @@
 import asyncio
-import json
 import logging
 import subprocess
 from asyncio.streams import StreamReader, StreamWriter
+from inspect import signature
 from pathlib import Path
 from string import Template
 from subprocess import Popen
-from uuid import uuid4
+from typing import get_type_hints, get_args
 
 from syml_core.service_base.protocol import SymlServiceCommand, \
     SymlServiceResponse
@@ -42,10 +42,17 @@ class LocalServiceBase:
                 continue
 
             try:
-                command = SymlServiceCommand.parse(raw_command)
-                logging.debug("received command %s", command)
 
+                command = SymlServiceCommand.parse(raw_command)
+
+                logging.debug("received command %s", command)
                 callable_command = getattr(self, f'cmd_{command.name}')
+
+                cmd_arg = get_type_hints(callable_command).get('cmd')
+
+                if cmd_arg:
+                    args_type = get_args(cmd_arg)[0]
+                    command.args = args_type(**command.args)
 
                 # TODO: handle generators
                 response: SymlServiceResponse = await callable_command(command)
@@ -84,7 +91,8 @@ class LocalServiceBase:
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         asyncio.run(self.serve(path))
 
-    def get_pipenv_python_bin(self, executable_path):
+    @staticmethod
+    def get_pipenv_python_bin(executable_path):
         return subprocess.run([
             'pipenv',
             '--py',
@@ -103,7 +111,6 @@ class LocalServiceBase:
         #         if not python_bin:
         #
         # else:
-
 
         self.logger.debug('Starting local service %s', self._name)
         self.local_server = Popen(

@@ -127,8 +127,6 @@ class CLIClient(LocalServiceBase):
             errors=errors,
         )
 
-        print(command)
-
         self.active_commands[command.cid] = pending
 
         logging.debug("sending command %s %s", name, command)

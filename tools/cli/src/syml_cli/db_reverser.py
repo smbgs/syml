@@ -55,10 +55,12 @@ class SymlDBReverserCLI(SymlServiceBasedCLI):
 
         """
         result = self._db_reverser.alchemy(
-            connection_string=connection_string,
-            schemas=schemas,
-            objects_names=objects_names,
-            objects_types=objects_types,
+            args=dict(
+                connection_string=connection_string,
+                schemas=schemas,
+                objects_names=objects_names,
+                objects_types=objects_types,
+            )
         )
 
         # TODO: pass to serialization service

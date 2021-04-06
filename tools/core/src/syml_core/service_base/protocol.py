@@ -109,8 +109,6 @@ class SymlServiceResponse(Serializable):
         if self.info and self.command and self.command.info:
             response['info'] = self.info
 
-        print("Shaping/...", self.command)
-
         if self.data:
             if self.command and self.command.shape:
                 response['data'] = shape_data(self.data, self.command.shape)

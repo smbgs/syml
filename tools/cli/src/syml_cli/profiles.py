@@ -52,7 +52,9 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         # TODO: learn how to use arg aliases in python.fire
         # TODO: consider python-prompt-toolkit
         yaml.dump(self._profiles.delete(
-            profile_name=profile_name,
+            args=dict(
+                profile_name=profile_name,
+            )
         ), sys.stdout, sort_keys=False)
 
     def alias(self, profile_name: str, alias_name, alias_val=None):
@@ -66,7 +68,9 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         :param alias_val: alias value (any string)
         """
         yaml.dump(self._profiles.alias(
-            profile_name=profile_name,
-            alias_name=alias_name,
-            alias_val=alias_val,
+            args=dict(
+                profile_name=profile_name,
+                alias_name=alias_name,
+                alias_val=alias_val,
+            )
         ), sys.stdout, sort_keys=False)
