@@ -1,5 +1,5 @@
 from syml_cli.common import SYML_ROOT_PATH
-from syml_core.service_base.local import CLIClient
+from syml_core.service_base.client import CLIClient
 
 
 class SymlDBReverserClient(CLIClient):

@@ -1,8 +1,6 @@
-from os import getenv
+from sqlalchemy import MetaData, create_engine, ForeignKey
 
-from syml_core.service_base.local import LocalServiceBase
-from sqlalchemy import MetaData, create_engine, ForeignKeyConstraint, ForeignKey
-
+from syml_core.service_base.base import LocalServiceBase
 from syml_core.service_base.protocol import SymlServiceResponse
 
 
