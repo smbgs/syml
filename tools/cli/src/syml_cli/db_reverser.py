@@ -1,6 +1,3 @@
-import colorama
-import sys
-import yaml
 from rich import box
 from rich.console import Console
 from rich.table import Table
@@ -9,6 +6,7 @@ from syml_cli.clients.db_reverser import SymlDBReverserClient
 from syml_cli.common import SymlServiceBasedCLI
 
 console = Console()
+
 
 class SymlDBReverserCLI(SymlServiceBasedCLI):
 
@@ -62,9 +60,9 @@ class SymlDBReverserCLI(SymlServiceBasedCLI):
             objects_names=objects_names,
             objects_types=objects_types,
         )
-        colorama.init()
 
         # TODO: pass to serialization service
+        console.print("")
         for name, manifest in result['data'].items():
 
             table = Table(
@@ -77,10 +75,10 @@ class SymlDBReverserCLI(SymlServiceBasedCLI):
             )
 
             table.add_column(" :key:", justify="center", width=3)
-            table.add_column("Name", style="dim")
-            table.add_column("Type", justify="left")
+            table.add_column("Name", style="dim", min_width=30)
+            table.add_column("Type", justify="left", min_width=15)
             table.add_column("N", justify="right")
-            table.add_column("Reference", justify="right")
+            table.add_column("Reference", justify="right", min_width=20)
 
             for field in manifest:
                 table.add_row(
