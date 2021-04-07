@@ -21,7 +21,12 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         yaml.dump(
 
             self._profiles.list(
-                shape=[['items', 'name', ['meta', 'updated_at']]]
+                shape=[
+                    {'items': [
+                        'name',
+                        {'meta': ['updated_at']}
+                    ]}
+                ]
             )['data']['items'],
 
             sys.stdout, sort_keys=False
