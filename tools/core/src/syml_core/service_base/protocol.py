@@ -18,8 +18,12 @@ def shape_data(data: typing.Dict, shape: Shape = None):
         for field in shape:
             if type(field) == str:
                 result[field] = data.get(field)
+            elif type(field) == dict:
+                key = next(iter(field))
+                result[key] = shape_data(data.get(key), field[key])
             else:
-                result[field[0]] = shape_data(data.get(field[0]), field[1:])
+                key = field[0]
+                result[key] = shape_data(data.get(key), field[1:])
         return result
 
     elif isinstance(data, list):
