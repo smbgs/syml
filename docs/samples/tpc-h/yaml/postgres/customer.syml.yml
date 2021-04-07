@@ -25,7 +25,7 @@ spec:
 
     - name: id
       dimension: retain
-      type: GROUP
+      #type: GROUP
       fields:
 
         - name: customer_id
