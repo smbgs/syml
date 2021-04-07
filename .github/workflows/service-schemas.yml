@@ -14,7 +14,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./tools/schemas
+        
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
@@ -24,7 +27,6 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pipenv
-        cd tools/schemas
         pipenv install
     - name: Test with pytest
       run: |
