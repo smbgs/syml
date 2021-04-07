@@ -1,5 +1,3 @@
-from rich.console import Console
-
 from syml_cli.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI
 from syml_core.service_base.client import ServiceClient
@@ -22,7 +20,7 @@ class SymlSystemCLI(SymlServiceBasedCLI):
             if isinstance(client, ServiceClient):
                 client.start_local_server()
 
-        Console().input("Running... press enter to exit!")
+        self.console.input("Running... press enter to exit!")
 
     def down(self):
         """

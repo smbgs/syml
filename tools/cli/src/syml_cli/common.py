@@ -1,22 +1,13 @@
-import typing
-from pathlib import Path
-
-SYML_ROOT_PATH = (Path(__file__).parent / '..' / '..' / '..').resolve()
-
-SYML_CORE_PATH = SYML_ROOT_PATH / 'core'
-SYML_CLI_PATH = SYML_ROOT_PATH / 'cli'
+from rich.console import Console
 
 
-class SymlCLI:
-    pass
-
-
-class SymlServiceBasedCLI(SymlCLI):
+class SymlServiceBasedCLI:
 
     _to_finalize = []
 
     def __init__(self):
         SymlServiceBasedCLI._to_finalize.append(self)
+        self.console = Console()
 
     def _finalize(self):
         for c in self.__dict__.values():

@@ -1,11 +1,8 @@
 from rich import box
-from rich.console import Console
 from rich.table import Table
 
 from syml_cli.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI
-
-console = Console()
 
 
 class SymlDBReverserCLI(SymlServiceBasedCLI):
@@ -24,7 +21,7 @@ class SymlDBReverserCLI(SymlServiceBasedCLI):
         objects_types='@all',
 
         # DB Schema Serializer parameters
-        output='yaml',
+        output='cli',
         stream='@stdout'
     ):
         """
@@ -48,7 +45,7 @@ class SymlDBReverserCLI(SymlServiceBasedCLI):
             to reverse
 
         :param output:
-            Output format (yaml, markdown, etc.)
+            Output format (cli, yaml, markdown, etc.)
 
         :param stream:
             Output destination (@stdout|-, uri) to serialize the output into
@@ -63,43 +60,49 @@ class SymlDBReverserCLI(SymlServiceBasedCLI):
             )
         )
 
-        # TODO: pass to serialization service
-        console.print("")
-        for name, manifest in result['data'].items():
+        # TODO: support various output types?
 
-            table = Table(
-                title=f'  {name}',
-                title_justify='left',
-                title_style='bold white reverse',
-                show_header=True,
-                header_style="bold white",
-                expand=True,
-                box=box.SQUARE
-            )
+        if output == 'cli':
 
-            table.add_column(" :key:", justify="center", max_width=3)
-            table.add_column("Name", style="dim", min_width=30)
-            table.add_column("Type", justify="left", min_width=15)
-            table.add_column("N", justify="center", max_width=1)
-            table.add_column("Reference", justify="right", min_width=20)
+            self.console.print()
 
-            for field in manifest:
-                table.add_row(
-                    "✔️" if 'primary_key' in field.get('tags', []) else "",
+            for name, manifest in result['data'].items():
 
-                    f"[bold]{field['name']}[/bold]"
-                    if 'primary_key' in field.get('tags', [])
-                    else field['name'],
-
-                    field['type'],
-                    "✔️" if 'nullable' in field.get('tags', []) else "",
-
-                    f"{field['reference']['table']}.{field['reference']['column']}"
-                    if 'reference' in field else "",
-
-                    style="#cccccc"
+                table = Table(
+                    title=f'  {name}',
+                    title_justify='left',
+                    title_style='bold white reverse',
+                    show_header=True,
+                    header_style="bold white",
+                    expand=True,
+                    box=box.SQUARE
                 )
-                # yaml.dump(field, sys.stdout, sort_keys=False)
 
-            console.print(table)
-            yield '\n'
+                table.add_column(" :key:", justify="center", max_width=3)
+                table.add_column("Name", style="dim", min_width=30)
+                table.add_column("Type", justify="left", min_width=15)
+                table.add_column("N", justify="center", max_width=1)
+                table.add_column("Reference", justify="right", min_width=20)
+
+                for field in manifest:
+                    table.add_row(
+                        "✔️" if 'primary_key' in field.get('tags', []) else "",
+
+                        f"[bold]{field['name']}[/bold]"
+                        if 'primary_key' in field.get('tags', [])
+                        else field['name'],
+
+                        field['type'],
+                        "✔️" if 'nullable' in field.get('tags', []) else "",
+
+                        f"{field['reference']['table']}."
+                        f"{field['reference']['column']}"
+
+                        if 'reference' in field else "",
+
+                        style="#cccccc"
+                    )
+                    # yaml.dump(field, sys.stdout, sort_keys=False)
+
+                self.console.print(table)
+                self.console.print()

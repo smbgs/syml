@@ -1,9 +1,5 @@
-from rich.console import Console
-
 from syml_cli.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI
-
-console = Console()
 
 
 class SymlSchemasCLI(SymlServiceBasedCLI):
@@ -41,4 +37,4 @@ class SymlSchemasCLI(SymlServiceBasedCLI):
             ]
         )
 
-        console.print(result)
+        self.console.print(result)

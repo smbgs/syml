@@ -188,8 +188,3 @@ class SymlProfileService(LocalServiceBase):
                 )
             ]
         )
-
-
-if __name__ == '__main__':
-    service = SymlProfileService()
-    service.unix_serve()
