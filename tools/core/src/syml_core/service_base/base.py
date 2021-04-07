@@ -1,11 +1,10 @@
 import asyncio
 import logging
 import subprocess
+import traceback
 from asyncio.streams import StreamReader, StreamWriter
-from inspect import signature
 from pathlib import Path
 from string import Template
-from subprocess import Popen
 from typing import get_type_hints, get_args
 
 from syml_core.service_base.protocol import SymlServiceCommand, \
@@ -22,9 +21,7 @@ class LocalServiceBase:
     SYML_ENVIRONMENTS_PATH = '~/.syml/environments.yaml'
     UNIX_SOCKET_PATH = '~/.syml/sockets/${service}.sock'
 
-    local_executable: Path
-
-    def __init__(self, name):
+    def __init__(self, name: str):
         self._name = name
         self.local_server = None
 
@@ -38,6 +35,7 @@ class LocalServiceBase:
             raw_command = await reader.readline()
 
             if raw_command == b'':
+                # TODO: not ideal, remove pooling if possible
                 await asyncio.sleep(0.5)
                 continue
 
@@ -55,7 +53,25 @@ class LocalServiceBase:
                     command.args = args_type(**command.args)
 
                 # TODO: handle generators
-                response: SymlServiceResponse = await callable_command(command)
+                try:
+                    response: SymlServiceResponse
+                    if cmd_arg:
+                        response = await callable_command(command)
+                    else:
+                        response = await callable_command()
+
+                except Exception as e:
+                    response = SymlServiceResponse(
+                        data=dict(),
+                        errors=[
+                            dict(message="unhandled exception while "
+                                         "processing command",
+                                 exception=e,
+                                 trace=traceback.format_exc().splitlines()
+                            )
+                        ]
+                    )
+
                 response.command = command
 
                 writer.write(response.jsonb())
@@ -99,27 +115,3 @@ class LocalServiceBase:
             executable_path
         ])
 
-    def start_local_server(self):
-        # TODO: if non-local shortcut should be conditional
-        # TODO: docker and remote versions of this might be easy to do as well
-
-        # env_config_path = Path(self.SYML_ENVIRONMENTS_PATH).expanduser().resolve()
-        # if env_config_path.exists():
-        #     with open(str(env_config_path), 'r+') as f:
-        #         env_config = yaml.load(f, Loader=yaml.SafeLoader)
-        #         python_bin = env_config.get(self._name)
-        #         if not python_bin:
-        #
-        # else:
-
-        self.logger.debug('Starting local service %s', self._name)
-        self.local_server = Popen(
-            cwd=str(self.local_executable.parent),
-            args=[
-                'pipenv',
-                'run',
-                'python',
-                str(self.local_executable),
-            ],
-        )
-        self.logger.debug('Started local service %s', self._name)

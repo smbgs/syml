@@ -1,11 +1,11 @@
-openapi: 3.1.0
+openapi: 3.0.0
 
 info:
   version: 0.0.1
   title: SYML OpenAPI Schemas Specification
   contact:
     name: SYML 1.0
-    url: "https://github.com/smbgs/syml/tree/main/tools/core"
+    url: "https://github.com/smbgs/syml/tree/main/tools/schemas"
     email: syml@somebugs.com
 
 components:
@@ -21,7 +21,8 @@ components:
       properties:
         apiVersion:
           type: string
-          pattern: "[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+          pattern: >-
+            [-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
         kind:
           enum:
             - Schema
@@ -48,7 +49,22 @@ components:
           type: string
 
     SchemaSpec:
-      $ref: "#/components/schemas/Fields"
+      type: object
+
+      properties:
+
+        target:
+          $ref: "#/components/schemas/Target"
+
+        source:
+          oneOf:
+            - $ref: "#/components/schemas/FieldReference"
+            - type: array
+              items:
+                $ref: "#/components/schemas/FieldReference"
+
+        fields:
+          $ref: "#/components/schemas/Fields"
 
     Fields:
       type: array
@@ -61,10 +77,11 @@ components:
         - type
       properties:
         type:
-          oneOf:
-            - enum: ["GROUP"]
-            - type: string
-            # TODO: add discriminators
+          type: string
+#          oneOf:
+#            - enum: ["GROUP"]
+#            - type: string
+#            # TODO: add discriminators
 
         target:
           $ref: "#/components/schemas/Target"
@@ -141,7 +158,8 @@ components:
     # TODO: move out
     Version:
       type: string
-      pattern: "^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+      pattern: >-
+        ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
 
 paths: {}
 

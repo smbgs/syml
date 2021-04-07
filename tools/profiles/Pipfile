@@ -4,6 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+pyyaml = "*"
+syml-core = {editable = true, path = "./../core"}
 
 [dev-packages]
 

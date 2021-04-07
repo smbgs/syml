@@ -9,6 +9,7 @@ if __name__ == '__main__':
     from syml_cli.system import SymlSystemCLI
     from syml_cli.db_reverser import SymlDBReverserCLI
     from syml_cli.profiles import SymlProfilesCLI
+    from syml_cli.schemas import SymlSchemasCLI
 
     class SymlDBCLI(SymlProfileBasedCLI, SymlServiceBasedCLI):
         """
@@ -26,11 +27,6 @@ if __name__ == '__main__':
         powerful system that can be used in terminal or as a part of DevOps
         process
         """
-
-        profile: SymlProfilesCLI
-        db: SymlDBCLI
-        system: SymlSystemCLI
-
         def __init__(self, p='default', debug=False):
             super().__init__()
             if debug:
@@ -39,10 +35,7 @@ if __name__ == '__main__':
             self.system = SymlSystemCLI()
             self.profile = SymlProfilesCLI()
             self.db = SymlDBCLI(self._profile_name)
-
-        def info(self):
-            yield 'info'
-            # TODO: implement this
+            self.schemas = SymlSchemasCLI()
 
 
     fire.Fire(SymlCommandLineInterface, name='syml')

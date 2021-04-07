@@ -2,10 +2,9 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-    </content>
-    <orderEntry type="jdk" jdkName="Pipenv (core)" jdkType="Python SDK" />
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="jdk" jdkName="Pipenv (profiles)" jdkType="Python SDK" />
+    <orderEntry type="module" module-name="core" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

@@ -2,7 +2,7 @@ from rich import box
 from rich.console import Console
 from rich.table import Table
 
-from syml_cli.clients.db_reverser import SymlDBReverserClient
+from syml_cli.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI
 
 console = Console()
@@ -11,8 +11,8 @@ console = Console()
 class SymlDBReverserCLI(SymlServiceBasedCLI):
 
     def __init__(self):
-        self._db_reverser = SymlDBReverserClient()
         super().__init__()
+        self._db_reverser = Clients.db_reverser
 
     def alchemy(
         self,

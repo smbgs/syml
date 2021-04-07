@@ -21,6 +21,7 @@ spec:
   fields:
 
     - name: key
+      type: GROUP
       tags: ["pk"]
       dimension: retain
       fields:
