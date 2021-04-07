@@ -1,5 +1,3 @@
-__package__ = 'syml_profiles.service'
-
 from datetime import datetime
 from pathlib import Path
 
