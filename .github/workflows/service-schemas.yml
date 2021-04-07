@@ -6,8 +6,16 @@ name: Service / Schemas
 on:
   push:
     branches: [ main ]
+    paths:
+    - 'core/**'
+    - 'tools/schemas/**'
+    
   pull_request:
     branches: [ main ]
+    paths:
+    - 'core/**'
+    - 'tools/schemas/**'
+    
   workflow_dispatch:
   
 jobs:
