@@ -3,25 +3,32 @@ import json
 import logging
 import typing
 from asyncio import StreamWriter, StreamReader, Task, Future, AbstractEventLoop
+from subprocess import Popen
 from threading import Thread
 from typing import Dict
 
+from syml_core import TOOLS_ROOT
 from syml_core.service_base.base import LocalServiceBase
 from syml_core.service_base.protocol import SymlServiceResponse, \
     SymlServiceCommand
 
 
-class CLIClient(LocalServiceBase):
-    logger = logging.getLogger('CLICLient')
+class ServiceClient(LocalServiceBase):
+    logger = logging.getLogger('ServiceClient')
 
     shared_loop = asyncio.new_event_loop()
     shared_loop_ref_cnt = 0
 
-    def __init__(self, name, loop=None):
+    def __init__(self, name, executable=None, loop=None):
         super().__init__(name)
 
+        if executable is None:
+            executable = TOOLS_ROOT / name / 'src' / 'server.py'
+
+        self.local_executable = executable
+
         if loop is None:
-            CLIClient.shared_loop_ref_cnt += 1
+            ServiceClient.shared_loop_ref_cnt += 1
 
         self.loop: AbstractEventLoop = loop or self.shared_loop
         self.reader: StreamReader = None
@@ -172,13 +179,28 @@ class CLIClient(LocalServiceBase):
         self.logger.debug("finalizing %s", self._name)
         self.disconnect()
 
-        CLIClient.shared_loop_ref_cnt -= 1
-        if CLIClient.shared_loop_ref_cnt == 0:
+        ServiceClient.shared_loop_ref_cnt -= 1
+        if ServiceClient.shared_loop_ref_cnt == 0:
             self.logger.debug("stopping event loop")
 
             async def stop():
-                CLIClient.shared_loop.stop()
+                ServiceClient.shared_loop.stop()
 
             asyncio.run_coroutine_threadsafe(stop(), self.loop)
 
         self.logger.debug("finalized %s", self._name)
+
+    def start_local_server(self):
+        # TODO: if non-local shortcut should be conditional
+        # TODO: docker and remote versions of this might be easy to do as well
+        self.logger.debug('Starting local service %s', self._name)
+        self.local_server = Popen(
+            cwd=str(self.local_executable.parent),
+            args=[
+                'pipenv',
+                'run',
+                'python',
+                str(self.local_executable),
+            ],
+        )
+        self.logger.debug('Started local service %s', self._name)

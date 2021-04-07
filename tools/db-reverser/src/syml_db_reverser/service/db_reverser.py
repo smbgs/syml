@@ -87,3 +87,8 @@ class SymlDBReverserService(LocalServiceBase):
                 tables[str(table.name)].append(column_info)
 
         return tables
+
+
+if __name__ == '__main__':
+    service = SymlDBReverserService()
+    service.unix_serve()

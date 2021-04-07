@@ -1,6 +1,8 @@
-from syml_cli.clients.db_reverser import SymlDBReverserClient
-from syml_cli.clients.profiles import SymlProfileClient
+from rich.console import Console
+
+from syml_cli.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI
+from syml_core.service_base.client import ServiceClient
 
 
 class SymlSystemCLI(SymlServiceBasedCLI):
@@ -15,11 +17,18 @@ class SymlSystemCLI(SymlServiceBasedCLI):
         """
         Starts all Syml services locally
         """
-        SymlProfileClient().start_local_server()
-        SymlDBReverserClient().start_local_server()
+        client: ServiceClient
+        for client in vars(Clients).values():
+            if isinstance(client, ServiceClient):
+                client.start_local_server()
+
+        Console().input("Running... press enter to exit!")
 
     def down(self):
         """
         Stops all Syml services locally
         """
 
+
+if __name__ == '__main__':
+    SymlSystemCLI().up()

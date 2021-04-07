@@ -1,6 +1,6 @@
 from rich.console import Console
 
-from syml_cli.clients.schemas import SymlSchemasClient
+from syml_cli.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI
 
 console = Console()
@@ -12,7 +12,8 @@ class SymlSchemasCLI(SymlServiceBasedCLI):
     """
 
     def __init__(self):
-        self._schemas = SymlSchemasClient()
+        self._schemas = Clients.schemas
+
         super().__init__()
 
     def validate(

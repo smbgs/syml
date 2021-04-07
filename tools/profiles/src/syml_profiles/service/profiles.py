@@ -3,11 +3,10 @@ from pathlib import Path
 
 import yaml
 
-from syml_cli.service.parameters import CreateProfile, ListProfiles, \
-    DeleteProfile, ProfileSetAlias
 from syml_core.service_base.base import LocalServiceBase
 from syml_core.service_base.protocol import SymlServiceResponse, \
     SymlServiceCommand
+from .parameters import CreateProfile, DeleteProfile, ProfileSetAlias
 
 
 class SymlProfileService(LocalServiceBase):
@@ -21,7 +20,7 @@ class SymlProfileService(LocalServiceBase):
     def __init__(self):
         super().__init__('profiles')
 
-    async def cmd_list(self, cmd: SymlServiceCommand[ListProfiles]):
+    async def cmd_list(self):
         await self.ensure()
 
         items = []
@@ -190,3 +189,7 @@ class SymlProfileService(LocalServiceBase):
             ]
         )
 
+
+if __name__ == '__main__':
+    service = SymlProfileService()
+    service.unix_serve()
