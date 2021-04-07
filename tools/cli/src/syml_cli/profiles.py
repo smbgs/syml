@@ -1,8 +1,7 @@
 import sys
-
 import yaml
 
-from syml_cli.clients.profiles import SymlProfileClient
+from syml_cli.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI
 
 
@@ -12,17 +11,19 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
     """
 
     def __init__(self):
-        self._profiles = SymlProfileClient()
         super().__init__()
+        self._profiles = Clients.profiles
 
     def list(self):
         """
         Lists existing profiles in the profile names
         """
         yaml.dump(
+
             self._profiles.list(
                 shape=[['items', 'name', ['meta', 'updated_at']]]
             )['data']['items'],
+
             sys.stdout, sort_keys=False
         )
         # TODO: implement proper console output
@@ -72,5 +73,6 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
                 profile_name=profile_name,
                 alias_name=alias_name,
                 alias_val=alias_val,
-            )
+            ),
+            shape=['aliases']
         ), sys.stdout, sort_keys=False)

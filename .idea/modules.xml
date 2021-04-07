@@ -13,6 +13,7 @@
       <module fileurl="file://$PROJECT_DIR$/tools/k8s-operator/k8s-operator.iml" filepath="$PROJECT_DIR$/tools/k8s-operator/k8s-operator.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/monitor/monitor.iml" filepath="$PROJECT_DIR$/tools/monitor/monitor.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/openapi-bridge/openapi-bridge.iml" filepath="$PROJECT_DIR$/tools/openapi-bridge/openapi-bridge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/profiles/profiles.iml" filepath="$PROJECT_DIR$/tools/profiles/profiles.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/schemas/schemas.iml" filepath="$PROJECT_DIR$/tools/schemas/schemas.iml" />
     </modules>
   </component>
