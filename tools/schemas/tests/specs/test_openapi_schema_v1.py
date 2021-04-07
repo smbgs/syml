@@ -12,7 +12,7 @@ class TestYaml(TestCase):
 
     def test_spec_loading(self):
         spec = Spec(str(self.spec_path))
-        self.assertEqual(spec.body.get('openapi'), '3.1.0')
+        self.assertEqual(spec.body.get('openapi'), '3.0.0')
         self.assertEqual(spec.url, 'file://' + str(self.spec_path))
 
     def test_spec_validation(self):
