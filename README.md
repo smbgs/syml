@@ -12,7 +12,7 @@ tracing, migrations with rich versioning.
 Syml also can be embedded in Markdown, and the Syml toolchain
 should support both yaml and markdown based Syml definitions.
 
-### Core Libraries
+### Core
 
 This repository also includes the simple python-based tooling capable
 of managing Syml and markdown files with Syml embeddings. 
@@ -20,90 +20,62 @@ of managing Syml and markdown files with Syml embeddings.
 This tooling contains python core libraries capable of
 representing the YAML and Markdown files as SYML object model.
 
-#### Dependencies
-
-Schema validation:
-
-- https://pypi.org/project/yamale/ - (currently used, has limitations that we already can feel, possibly needs prs?)
-- https://pypi.org/project/yschema/ - (strong yamale alternative, but seems abandoned, possibly needs support)
-- https://pypi.org/project/jsonschema/ - (lots of tooling, but quite verbose, yaml based schemas are not well supported)
-
-
 Core libraries for other languages may be developed at some point.
 
-## SYML Engine
+### Command Line Interface
 
 Integrates Core SYML libraries into a higher level toolkit capable
 of specific actions provided by the SYML engine modules.
-
-### YML parser
-
-YML Parser module is capable of reading the yml files from the
-file-system or external URI (with necessary caching), includes
-resolution and representing them as consolidated and
-complete object model.
-
-### YML serializer
-
-YML Serializer module is capable of writing the yml files from
-SYML object model (as separate files or directories with files).
-
-### Markdown parser
-
-Markdown Parser module is capable of reading the markdown files,
-extracting SYML yaml definitions from them and with the help of
-the YML Parser module representing them as consolidated and
-complete object model.
-
-### SQL Reverse Engineer
-
-SQL Reverse Engineer module is capable of connecting to the 
-compatible SQL databases and creating SYML object model entities
-from the database entities.
-
-#### Dependencies
-
-Existing database (common SQL engines)
-
-- https://docs.sqlalchemy.org/en/14/core/reflection.html (core principle)
-- https://github.com/agronholm/sqlacodegen (implementation that generates sqlalchemy python tables, code can be a good stating poing)
-
-DDL in files (common SQL engines)
-
-- No candidates so far
-- Potentially can be implemented by creating embedded postgres database, applying DDL, and then using above tools
-
-
-### SQL Forward Engineer
-
-SQL Forward Engineer module is capable of connecting to the
-compatible SQL databases and managing (creating AND updating)
-the database entities based on the SYML object model.
-
-#### Dependencies
-
-- sqlalchemy based, but fully custom made
-
-### Data Analyzer
-
-Data analyzer module is capable of connecting to the compatible databases and
-retreiving the analytical data from entities (amount of rows in a table, distinct colum values, value histogramms etc.)
-
-### K8S database manager
-TBD
-
-### HTML documentation generator
-TBD
-
-### OpenAPI bridge
-TBD
-
-### DBT bridge
-TBD
-
-## SYML Command Line Interface
 
 Set of command line utilities based on the SYML core libraries
 and SYML Engine for manual or automated management of SYML
 definitions. CLI can be extended by providing additional 
 SYML Engine modules.
+
+----
+
+### Initial release completeness
+
+- [ ] Core Framework
+- [ ] Command Line Interface
+- [ ] Profiles  
+- [ ] Schemas
+- [ ] Database Tools  
+    - [ ] Reverser
+    - [ ] Pulse
+    - [ ] Analytics
+    - [ ] Seeder
+- [ ] K8s
+- [ ] DevOps
+
+----
+
+### Short-term todo:
+
+- Core Framework
+    - [x] Reduce boilerplate for CLI clients
+
+
+- Schemas
+    - [x] Implement the prototype for syml core / monitor to work with schemas
+    - [ ] Implement simple CLI schema visualizer (outline core schema parts)
+    - [x] Create openapi schema for SYMLSchema
+    - [ ] Monitoring
+        - [x] Implement validation API for SYMLSchema
+        - [x] Extend the CLI to support schema validation
+        - [ ] Extend the core service framework to support monitoring
+        - [ ] Extend the CLI to support monitoring (start moving towards interactive shell)
+
+
+- DevOps
+    - [x] Figure out how to debug syml services in IDE
+    - [x] Figure out how to test services
+    - [ ] Improve pipenv things (slow cmd)
+
+
+- Database Tools
+    - DB Reverser
+        - [ ] Update the output to be in SYML schema format (as an option?)
+    - DB Seeder
+        - [ ] Implement the initial POC that can consume SYML schema and update the database
+	
