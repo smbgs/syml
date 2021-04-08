@@ -1,11 +1,15 @@
 import asyncio
+import dataclasses
 import logging
 import subprocess
+import sys
 import traceback
 from asyncio.streams import StreamReader, StreamWriter
 from pathlib import Path
 from string import Template
 from typing import get_type_hints, get_args
+
+from rich.traceback import Traceback
 
 from syml_core.service_base.protocol import SymlServiceCommand, \
     SymlServiceResponse
@@ -61,13 +65,25 @@ class LocalServiceBase:
                         response = await callable_command()
 
                 except Exception as e:
+                    exc_type, exc_value, traceback = sys.exc_info()
+                    tb = Traceback()
+                    trace = tb.extract(
+                        exc_type, exc_value, traceback, show_locals=False
+                    )
+
+                    trace = [dataclasses.asdict(s) for s in trace.stacks]
+                    trace = [{
+                        **t,
+                        'frames': t.get('frames')[1:]
+                    } for t in trace]
+
                     response = SymlServiceResponse(
                         data=dict(),
                         errors=[
                             dict(message="unhandled exception while "
-                                         "processing command",
+                                         "processing command (${exception})",
                                  exception=e,
-                                 trace=traceback.format_exc().splitlines()
+                                 trace=trace
                             )
                         ]
                     )

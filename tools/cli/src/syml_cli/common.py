@@ -1,4 +1,4 @@
-from rich.console import Console
+from syml_core.rich.components import SymlConsole
 
 
 class SymlServiceBasedCLI:
@@ -7,7 +7,7 @@ class SymlServiceBasedCLI:
 
     def __init__(self):
         SymlServiceBasedCLI._to_finalize.append(self)
-        self.console = Console()
+        self.console = SymlConsole()
 
     def _finalize(self):
         for c in self.__dict__.values():
