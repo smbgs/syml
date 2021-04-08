@@ -26,12 +26,15 @@ class SymlSchemasCLI(SymlServiceBasedCLI):
 
         self.console.print_info(result.get('info'))
 
-        schema = StringIO()
-        yaml.dump(result['data'].get('definition'), schema, sort_keys=False)
-        schema.seek(0)
-        syntax = Syntax(schema.read(), "yaml", theme="native", line_numbers=True)
-        self.console.print()
-        self.console.print(syntax)
+        data = result.get('data')
+
+        if data:
+            schema = StringIO()
+            yaml.dump(result['data'].get('definition'), schema, sort_keys=False)
+            schema.seek(0)
+            syntax = Syntax(schema.read(), "yaml", theme="native", line_numbers=True)
+            self.console.print()
+            self.console.print(syntax)
 
         self.console.print_errors(result.get('errors'))
         if validate:
