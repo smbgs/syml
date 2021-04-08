@@ -4,6 +4,7 @@ import fire
 
 from syml_cli.common import SymlProfileBasedCLI, SymlServiceBasedCLI
 
+
 if __name__ == '__main__':
 
     from syml_cli.system import SymlSystemCLI
