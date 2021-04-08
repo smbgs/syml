@@ -43,6 +43,7 @@ jobs:
     - name: Install schemas dependencies
       run: |
         pipenv install
+        pipenv install -e ./../core/
     - name: Test with pytest
       run: |
         PYTHONPATH=src pipenv run python -m unittest tests/specs/*
