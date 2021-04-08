@@ -7,3 +7,9 @@ class Clients:
     db_reverser = ServiceClient('db-reverser')
     schemas = ServiceClient('schemas')
 
+    @classmethod
+    def finalize_all(cls):
+        for client in vars(cls).values():
+            if hasattr(client, 'finalize'):
+                client.finalize()
+

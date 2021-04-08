@@ -1,5 +1,4 @@
 from io import StringIO
-from string import Template
 
 import yaml
 from rich.panel import Panel

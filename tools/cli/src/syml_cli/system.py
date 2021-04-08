@@ -8,9 +8,6 @@ class SymlSystemCLI(SymlServiceBasedCLI):
     Manages the local SYML services so that CLI can work more quickly
     """
 
-    def __init__(self):
-        super().__init__()
-
     def up(self):
         """
         Starts all Syml services locally
