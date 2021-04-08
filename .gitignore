@@ -1,5 +1,6 @@
 # Obsidian metastore
 
+__pycache__
 .obsidian/
 .venv/
 *.egg-info

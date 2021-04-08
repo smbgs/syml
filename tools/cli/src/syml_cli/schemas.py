@@ -2,6 +2,7 @@ from io import StringIO
 from string import Template
 
 import yaml
+from rich.panel import Panel
 from rich.syntax import Syntax
 
 from syml_cli.clients import Clients
@@ -74,21 +75,17 @@ class SymlSchemasCLI(SymlServiceBasedCLI):
 
     def _print_validation(self, validation):
 
-        schema = StringIO()
-        yaml.dump(validation.get('instance'), schema, sort_keys=False)
-        schema.seek(0)
+        if validation.get('message'):
+            schema = StringIO()
+            yaml.dump(validation.get('instance'), schema, sort_keys=False)
+            schema.seek(0)
+            self.console.print(
+                '  🚩' + validation.get('message'),
+                style='bold red'
+            )
+            self.console.print()
 
-        # for error in result.get('errors'):
-        #     self.console.print(
-        #         '  🐛 ' + Template(error.get('message')).substitute(error),
-        #         style='red'
-        #     )
-
-        self.console.print(
-            '  🚩' + validation.get('message'),
-            style='bold red'
-        )
-        self.console.print()
-
-        syntax = Syntax(schema.read(), "yaml", theme="native", line_numbers=True)
-        self.console.print(syntax)
+            syntax = Syntax(schema.read(), "yaml", theme="native", line_numbers=True)
+            self.console.print(syntax)
+        else:
+            self.console.print(Panel("Schema is valid!", style="green"))
