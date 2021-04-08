@@ -19,12 +19,14 @@ class SymlConsole(Console):
                 for f in t.get('frames'):
                     lines.append(
                         f" ⎔ [white bold]{f.get('name')}[/] in 🗎 "
-                        f"[white]{f.get('filename')}:{f.get('lineno')}[/]"
+                        f"[link=file://{f.get('filename')}]{f.get('filename')}"
+                        f":{f.get('lineno')}[/link]"
                     )
 
                 self.print(Panel(
                     '\n'.join(lines),
-                    title='⧳ ' + Template(e.get('message').capitalize()).substitute(e),
+                    title='⧳ ' + Template(e.get('message').capitalize())
+                        .substitute(e),
                     title_align='left',
                     style='red'
                 ))
