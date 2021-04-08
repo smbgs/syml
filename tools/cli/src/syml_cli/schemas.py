@@ -37,4 +37,4 @@ class SymlSchemasCLI(SymlServiceBasedCLI):
             ]
         )
 
-        self.console.print(result)
+        self.console.print_errors(result.get('errors'))
