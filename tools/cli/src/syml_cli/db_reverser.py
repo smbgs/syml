@@ -7,10 +7,6 @@ from syml_cli.common import SymlServiceBasedCLI
 
 class SymlDBReverserCLI(SymlServiceBasedCLI):
 
-    def __init__(self):
-        super().__init__()
-        self._db_reverser = Clients.db_reverser
-
     def alchemy(
         self,
 
@@ -51,7 +47,7 @@ class SymlDBReverserCLI(SymlServiceBasedCLI):
             Output destination (@stdout|-, uri) to serialize the output into
 
         """
-        result = self._db_reverser.alchemy(
+        result = Clients.db_reverser.alchemy(
             args=dict(
                 connection_string=connection_string,
                 schemas=schemas,

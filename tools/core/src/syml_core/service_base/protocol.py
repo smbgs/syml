@@ -134,3 +134,19 @@ class SymlServiceResponse(Serializable):
             info=(self.info or []) + (response.info or [])
         )
 
+    @staticmethod
+    def merge(**mapping: 'SymlServiceResponse'):
+        return SymlServiceResponse(
+            data={k: r.data for k, r in mapping.items() if r},
+            info=[
+                it for r in mapping.values()
+                if r and r.info
+                for it in r.info
+            ],
+            errors=[
+                it for r in mapping.values()
+                if r and r.errors
+                for it in r.errors
+            ],
+        )
+

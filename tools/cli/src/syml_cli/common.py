@@ -1,23 +1,25 @@
+from rich.box import Box
+
 from syml_core.rich.components import SymlConsole
+
+CUSTOM: Box = Box(
+    """\
+╭─┬╮
+│ ││
+├─┼┤
+│ ││
+├┈┼┤
+├─┼┤
+│ ││
+╰─┴╯
+"""
+)
 
 
 class SymlServiceBasedCLI:
 
-    _to_finalize = []
-
     def __init__(self):
-        SymlServiceBasedCLI._to_finalize.append(self)
         self.console = SymlConsole()
-
-    def _finalize(self):
-        for c in self.__dict__.values():
-            if hasattr(c, 'finalize'):
-                c.finalize()
-
-    @classmethod
-    def _finalize_all(cls):
-        for it in cls._to_finalize:
-            it._finalize()
 
 
 class SymlProfileBasedCLI:

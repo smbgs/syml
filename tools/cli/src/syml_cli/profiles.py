@@ -1,5 +1,4 @@
 import sys
-import yaml
 
 from syml_cli.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI
@@ -10,17 +9,13 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
     Profiles command group is used to configure user-based Syml CLI profiles
     """
 
-    def __init__(self):
-        super().__init__()
-        self._profiles = Clients.profiles
-
     def list(self):
         """
         Lists existing profiles in the profile names
         """
         self.console.print(
 
-            self._profiles.list(
+            Clients.profiles.list(
                 shape=[
                     {'items': [
                         'name',
@@ -38,7 +33,7 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         :param profile_name: profile name
         :param base: optional profile name to copy settings from
         """
-        self.console.print(self._profiles.create(
+        self.console.print(Clients.profiles.create(
             args=dict(
                 profile_name=profile_name,
                 base=base
@@ -55,7 +50,7 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         """
         # TODO: learn how to use arg aliases in python.fire
         # TODO: consider python-prompt-toolkit
-        self.console.print(self._profiles.delete(
+        self.console.print(Clients.profiles.delete(
             args=dict(
                 profile_name=profile_name,
             )
@@ -71,7 +66,7 @@ class SymlProfilesCLI(SymlServiceBasedCLI):
         :param alias_name: alias name (without @)
         :param alias_val: alias value (any string)
         """
-        self.console.print(self._profiles.alias(
+        self.console.print(Clients.profiles.alias(
             args=dict(
                 profile_name=profile_name,
                 alias_name=alias_name,

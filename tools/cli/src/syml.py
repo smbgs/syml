@@ -2,7 +2,9 @@ import logging
 
 import fire
 
+from syml_cli.clients import Clients
 from syml_cli.common import SymlProfileBasedCLI, SymlServiceBasedCLI
+
 
 if __name__ == '__main__':
 
@@ -39,4 +41,4 @@ if __name__ == '__main__':
 
 
     fire.Fire(SymlCommandLineInterface, name='syml')
-    SymlServiceBasedCLI._finalize_all()
+    Clients.finalize_all()
