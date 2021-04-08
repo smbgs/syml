@@ -1,4 +1,19 @@
+from rich.box import Box
+
 from syml_core.rich.components import SymlConsole
+
+CUSTOM: Box = Box(
+    """\
+╭─┬╮
+│ ││
+├─┼┤
+│ ││
+├┈┼┤
+├─┼┤
+│ ││
+╰─┴╯
+"""
+)
 
 
 class SymlServiceBasedCLI:

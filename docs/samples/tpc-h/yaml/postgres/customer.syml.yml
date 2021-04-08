@@ -20,6 +20,7 @@ spec:
 
   source:
     schema: ../snowflake/customer.syml.yml
+    alias: customer
 
   fields:
 
