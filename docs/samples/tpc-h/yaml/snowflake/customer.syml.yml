@@ -23,22 +23,28 @@ spec:
     - name: C_CUSTKEY
       type: TEXT
       dimension: retain
-      tags: ["pk"]
+      constraints: ["pk", "not-null", "not-empty"]
+      desc: "Unique customer KEY"
+
 
     - name: PROFILE
       type: GROUP
       dimension: overwrite
+      desc: "Group of the personal customer fields"
 
       fields:
 
         - name: C_NAME
           type: TEXT
+          desc: "Full customer name"
 
         - name: C_ADDRESS
           type: TEXT
+          desc: "Customer address"
 
         - name: C_NATIONKEY
           type: TEXT
+          desc: "Reference to nation"
           relation:
             type: reference
             target:
@@ -46,16 +52,19 @@ spec:
               field: NATIONKEY
 
         - name: C_PHONE
+          desc: "Customer phone"
           type: TEXT
 
         - name: C_ACCTBAL
+          desc: "Account balance"
           type: DECIMAL
-          desc: Account balance
 
     - name: C_MKTSEGMENT
       type: TEXT
       dimension: overwrite
+      desc: "Market segment"
 
     - name: C_COMMENT
       dimension: overwrite
       type: TEXT
+      desc: "Customer record comment"

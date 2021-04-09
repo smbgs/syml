@@ -96,20 +96,21 @@ class SymlSchemasCLI(SymlServiceBasedCLI):
                     show_lines=True,
                 )
 
+                # TODO: only add column if at least one is present in rows
+
                 table.add_column(" :key:", justify="center", max_width=3)
                 table.add_column("Name", style="dim", min_width=30)
                 table.add_column("Dim", style="dim", min_width=10)
                 table.add_column("Type", justify="left", min_width=15)
                 table.add_column("N", justify="center", max_width=1)
                 table.add_column("E", justify="center", max_width=1)
-                table.add_column("Source", justify="left", min_width=15)
-                table.add_column("Relation", justify="right", min_width=20)
+                table.add_column("Source Field", justify="left", min_width=15)
+                #table.add_column("Relation", justify="right", min_width=20)
+                table.add_column("Description", justify="left", min_width=20)
 
                 self._render_fields(parent_source, spec_fields, table)
 
                 self.console.print(table)
-
-                self.console.print()
 
             elif output == 'cli-yaml':
                 schema = StringIO()
@@ -137,6 +138,14 @@ class SymlSchemasCLI(SymlServiceBasedCLI):
             source = copy.copy(parent_source)
             fields = field.get('fields')
 
+            # TODO: this should be a part of digestion
+
+            if field.get('type') == 'GROUP':
+                constraints.update({"non-null", "non-empty"})
+
+            if 'pk' in constraints:
+                constraints.update({"non-null", "non-empty"})
+
             if 'sourceField' in field:
                 source['field'] = field['sourceField']
             else:
@@ -153,14 +162,14 @@ class SymlSchemasCLI(SymlServiceBasedCLI):
                 field.get('dimension'),
                 field['type'],
 
-                "✔️" if 'not-null' not in constraints else "",
+                "✔️" if 'non-null' not in constraints else "",
 
-                "✔️" if 'not-empty' not in constraints else "",
+                "✔️" if 'non-empty' not in constraints else "",
 
-                f"{source.get('alias')}.{source.get('field')}"
+                f"{source.get('field')}"
                 if source else "",
 
-                str(field.get('relation', "")),
+                str(field.get('desc', "")),
 
                 style="#cccccc" if field['type'] != 'GROUP' else "#ffffff bold"
             )
