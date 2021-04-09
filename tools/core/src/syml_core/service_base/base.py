@@ -3,7 +3,6 @@ import dataclasses
 import logging
 import subprocess
 import sys
-import traceback
 from asyncio.streams import StreamReader, StreamWriter
 from pathlib import Path
 from string import Template
@@ -25,8 +24,9 @@ class LocalServiceBase:
     SYML_ENVIRONMENTS_PATH = '~/.syml/environments.yaml'
     UNIX_SOCKET_PATH = '~/.syml/sockets/${service}.sock'
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, uri=None):
         self._name = name
+        self._uri = uri
         self.local_server = None
 
     async def on_client_connected(
@@ -100,12 +100,16 @@ class LocalServiceBase:
                 self.logger.exception("oh no", e)
 
     async def cmd_disconnect(self):
+        # TODO: handle gracefully
         pass
 
-    @classmethod
-    def resolve_service_path(cls, name: str):
+    def resolve_service_path(self, name: str):
+
+        if self._uri:
+            return Path(self._uri).expanduser().resolve()
+
         return Path(
-            Template(cls.UNIX_SOCKET_PATH).substitute({"service": name})
+            Template(self.UNIX_SOCKET_PATH).substitute({"service": name})
         ).expanduser().resolve()
 
     async def serve(self, path):

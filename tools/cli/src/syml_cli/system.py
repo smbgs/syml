@@ -24,6 +24,9 @@ class SymlSystemCLI(SymlServiceBasedCLI):
         Stops all Syml services locally
         """
 
+    def check_rust(self):
+        self.console.print(Clients.rust_core.sync_command('test'))
+
 
 if __name__ == '__main__':
     SymlSystemCLI().up()
