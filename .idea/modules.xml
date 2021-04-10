@@ -10,6 +10,8 @@
       <module fileurl="file://$PROJECT_DIR$/tools/db-reverser/db-reverser.iml" filepath="$PROJECT_DIR$/tools/db-reverser/db-reverser.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/db-seeder/db-seeder.iml" filepath="$PROJECT_DIR$/tools/db-seeder/db-seeder.iml" />
       <module fileurl="file://$PROJECT_DIR$/docs/docs.iml" filepath="$PROJECT_DIR$/docs/docs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/go-tools/core/go-core.iml" filepath="$PROJECT_DIR$/go-tools/core/go-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/go-tools/go-parquet/go-parquet.iml" filepath="$PROJECT_DIR$/go-tools/go-parquet/go-parquet.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/k8s-operator/k8s-operator.iml" filepath="$PROJECT_DIR$/tools/k8s-operator/k8s-operator.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/monitor/monitor.iml" filepath="$PROJECT_DIR$/tools/monitor/monitor.iml" />
       <module fileurl="file://$PROJECT_DIR$/tools/openapi-bridge/openapi-bridge.iml" filepath="$PROJECT_DIR$/tools/openapi-bridge/openapi-bridge.iml" />
