@@ -1,6 +1,9 @@
 package main
 
-import "github.com/smbgs/syml/go-tools/core"
+import (
+	"github.com/smbgs/syml/go-tools/core"
+	"log"
+)
 
 func GetSchemaFromParquet(request core.Action) (core.Data, error) {
 	return core.Data{
@@ -10,5 +13,10 @@ func GetSchemaFromParquet(request core.Action) (core.Data, error) {
 
 func main() {
 	core.RegisterCommand("get-schema-from-parquet", GetSchemaFromParquet)
-	core.Service()
+
+	if err := core.Service(); err != nil {
+		log.Fatal("Unable to finalize service:", err)
+	}
+	log.Fatal("Finished")
+
 }

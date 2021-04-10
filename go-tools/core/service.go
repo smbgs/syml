@@ -83,7 +83,7 @@ func RegisterCommand(
 	Commands[name] = handler
 }
 
-func Service() {
+func Service() error {
 	var sockAddr = "~/.syml/sockets/test-go-socket.sock"
 
 	sockAddr, err := homedir.Expand(sockAddr)
@@ -99,8 +99,6 @@ func Service() {
 
 	log.Print("Started unix server at:", sockAddr)
 
-	defer l.Close()
-
 	for {
 		// Accept new connections, dispatching them to echoServer
 		// in a goroutine.
@@ -112,4 +110,7 @@ func Service() {
 
 		go HandleClient(conn)
 	}
+
+	return l.Close()
+
 }
