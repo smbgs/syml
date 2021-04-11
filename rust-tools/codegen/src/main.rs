@@ -1,6 +1,6 @@
 use serde_json::{json};
 
-use syml_core::{Service};
+use syml_core::service::{Service};
 
 fn main() -> std::io::Result<()> {
     let mut service = Service::new("rust-codegen");
