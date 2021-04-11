@@ -13,8 +13,14 @@ func main() {
 		}, nil
 	})
 
+	// TODO: call the syml `schemas` service to validate and store the
+	//  result. Note, this will require the `schemas` service to
+	//  Support getting schemas directly
+
+	// TODO: this should be inside the core
 	if err := core.Service("go-parquet"); err != nil {
 		log.Fatal("Unable to finalize service:", err)
 	}
+
 	log.Fatal("Finished")
 }

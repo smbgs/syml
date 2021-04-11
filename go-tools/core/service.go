@@ -10,29 +10,12 @@ import (
 	"os"
 )
 
-type Data = map[string]interface{}
-
-type Action struct {
-	Name  string `json:"name"`
-	Args  Data   `json:"args"`
-	Cid   string `json:"cid"`
-	Shape Data   `json:"shape"`
-
-	Info   bool `json:"info"`
-	Errors bool `json:"errors"`
+func RegisterCommand(name string, handler Callback) {
+	Commands[name] = handler
 }
-
-type Response struct {
-	Data Data   `json:"data"`
-	Cid  string `json:"cid"`
-}
-
-type Callback = func(action Action) (Data, error)
-
-var Commands = make(map[string]Callback)
 
 func HandleClient(conn net.Conn) {
-	log.Printf("Client connected [%s]", conn.RemoteAddr().Network())
+	log.Printf("ServiceClient connected [%s]", conn.RemoteAddr().Network())
 
 	var action Action
 
@@ -75,13 +58,6 @@ func HandleClient(conn net.Conn) {
 		log.Fatal(err)
 	}
 
-}
-
-func RegisterCommand(
-	name string,
-	handler Callback,
-) {
-	Commands[name] = handler
 }
 
 func Service(name string) error {
