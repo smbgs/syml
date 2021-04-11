@@ -25,7 +25,9 @@ class SymlSystemCLI(SymlServiceBasedCLI):
         """
 
     def check_rust(self):
-        self.console.print(Clients.rust_core.sync_command('test'))
+        self.console.print(
+            Clients.rust_codegen.sync_command('generate_struct_from_scheme')
+        )
 
 
 if __name__ == '__main__':
