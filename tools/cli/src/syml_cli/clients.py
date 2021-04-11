@@ -7,7 +7,7 @@ class Clients:
     db_reverser = ServiceClient('db-reverser')
     schemas = ServiceClient('schemas')
     rust_codegen = ServiceClient('rust-codegen')
-    go_core = ServiceClient('go_core', uri='~/.syml/sockets/test-go-socket.sock')
+    go_parquet = ServiceClient('go-parquet')
 
     @classmethod
     def finalize_all(cls):

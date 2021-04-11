@@ -5,18 +5,16 @@ import (
 	"log"
 )
 
-func GetSchemaFromParquet(request core.Action) (core.Data, error) {
-	return core.Data{
-		"adf": 123,
-	}, nil
-}
-
 func main() {
-	core.RegisterCommand("get-schema-from-parquet", GetSchemaFromParquet)
+	core.RegisterCommand("get-schema-from-parquet", func(action core.Action) (core.Data, error) {
+		//  TODO: get the actual schema from parquet file passed as URI or resource
+		return core.Data{
+			"test": 123,
+		}, nil
+	})
 
-	if err := core.Service(); err != nil {
+	if err := core.Service("go-parquet"); err != nil {
 		log.Fatal("Unable to finalize service:", err)
 	}
 	log.Fatal("Finished")
-
 }

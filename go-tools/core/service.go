@@ -3,6 +3,7 @@ package core
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"github.com/mitchellh/go-homedir"
 	"log"
 	"net"
@@ -12,7 +13,7 @@ import (
 type Data = map[string]interface{}
 
 type Action struct {
-	Name  string `json:"nameK"`
+	Name  string `json:"name"`
 	Args  Data   `json:"args"`
 	Cid   string `json:"cid"`
 	Shape Data   `json:"shape"`
@@ -83,8 +84,8 @@ func RegisterCommand(
 	Commands[name] = handler
 }
 
-func Service() error {
-	var sockAddr = "~/.syml/sockets/test-go-socket.sock"
+func Service(name string) error {
+	var sockAddr = fmt.Sprintf("~/.syml/sockets/%s.sock", name)
 
 	sockAddr, err := homedir.Expand(sockAddr)
 
@@ -112,5 +113,4 @@ func Service() error {
 	}
 
 	return l.Close()
-
 }

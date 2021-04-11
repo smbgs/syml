@@ -30,8 +30,9 @@ class SymlSystemCLI(SymlServiceBasedCLI):
         )
 
     def check_go(self):
-        #self.console.print(Clients.go_core.sync_command('test'))
-        self.console.print(Clients.go_core.sync_command('get-schema-from-parquet'))
+        self.console.print(
+            Clients.go_parquet.sync_command('get-schema-from-parquet')
+        )
 
 
 if __name__ == '__main__':
