@@ -6,7 +6,7 @@ class Clients:
     profiles = ServiceClient('profiles')
     db_reverser = ServiceClient('db-reverser')
     schemas = ServiceClient('schemas')
-    rust_core = ServiceClient('rust_core', uri='~/.syml/sockets/test-rust-socket.sock')
+    rust_codegen = ServiceClient('rust-codegen')
     go_core = ServiceClient('go_core', uri='~/.syml/sockets/test-go-socket.sock')
 
     @classmethod
