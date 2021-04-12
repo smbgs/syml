@@ -31,11 +31,11 @@ class ServiceClient(LocalServiceBase):
             ServiceClient.shared_loop_ref_cnt += 1
 
         self.loop: AbstractEventLoop = loop or self.shared_loop
-        self.reader: StreamReader = None
-        self.writer: StreamWriter = None
+        self.reader: typing.Optional[StreamReader] = None
+        self.writer: typing.Optional[StreamWriter] = None
         self.connecting = False
         self.active = False
-        self.reader_task: Task = None
+        self.reader_task: typing.Optional[Task] = None
         self.pending_commands = []
         self.active_commands: Dict[str, Future] = {}
 
@@ -190,6 +190,7 @@ class ServiceClient(LocalServiceBase):
 
         self.logger.debug("finalized %s", self._name)
 
+    # TODO: move out?
     def start_local_server(self):
         # TODO: if non-local shortcut should be conditional
         # TODO: docker and remote versions of this might be easy to do as well
