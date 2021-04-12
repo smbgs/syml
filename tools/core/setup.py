@@ -7,7 +7,6 @@ from setuptools import setup, find_packages
 #
 # requirements = convert_deps_to_pip(pfile['packages'], r=False)
 # test_requirements = convert_deps_to_pip(pfile['dev-packages'], r=False)
-
 import json
 
 with open('Pipfile.lock') as fd:

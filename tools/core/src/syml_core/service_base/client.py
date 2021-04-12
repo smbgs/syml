@@ -19,8 +19,8 @@ class ServiceClient(LocalServiceBase):
     shared_loop = asyncio.new_event_loop()
     shared_loop_ref_cnt = 0
 
-    def __init__(self, name, executable=None, loop=None):
-        super().__init__(name)
+    def __init__(self, name, executable=None, uri=None, loop=None):
+        super().__init__(name, uri=uri)
 
         if executable is None:
             executable = TOOLS_ROOT / name / 'src' / 'server.py'
