@@ -29,6 +29,11 @@ class SymlSystemCLI(SymlServiceBasedCLI):
             Clients.rust_codegen.sync_command('generate_struct_from_scheme')
         )
 
+    def check_go(self):
+        self.console.print(
+            Clients.go_parquet.sync_command('get-schema-from-parquet')
+        )
+
 
 if __name__ == '__main__':
     SymlSystemCLI().up()
