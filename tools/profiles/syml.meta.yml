@@ -1,0 +1,33 @@
+apiVersion: syml.somebugs.com/v1
+kind: Meta
+meta:
+  name: syml-profiles
+  desc: >-
+    Syml Profiles Management Service
+
+spec:
+  provides:
+    - interface: syml
+      actions:
+
+        - name: list
+
+        - name: create
+          args:
+            profile_name: str
+            base: str
+
+        - name: delete
+          args:
+            profile_name: str
+
+        - name: alias
+          args:
+            profile_name: str
+            alias_name: str
+            alias_val: str
+
+  requires:
+    - runtime: python>=3.9
+    - tool: pipenv
+

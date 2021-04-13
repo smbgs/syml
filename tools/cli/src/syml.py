@@ -2,7 +2,7 @@ import logging
 
 import fire
 
-from syml_cli.clients import Clients
+from syml_cli.gen.clients import Clients
 from syml_cli.common import SymlProfileBasedCLI, SymlServiceBasedCLI
 
 

@@ -13,6 +13,15 @@ from syml_core.service_base.protocol import SymlServiceResponse, \
     SymlServiceCommand
 
 
+class ClientsList:
+
+    @classmethod
+    def finalize_all(cls):
+        for client in vars(cls).values():
+            if hasattr(client, 'finalize'):
+                client.finalize()
+
+
 class ServiceClient(LocalServiceBase):
     logger = logging.getLogger('ServiceClient')
 

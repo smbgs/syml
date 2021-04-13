@@ -1,4 +1,4 @@
-from syml_cli.clients import Clients
+from syml_cli.gen.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI
 from syml_core.service_base.client import ServiceClient
 

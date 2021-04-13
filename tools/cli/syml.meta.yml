@@ -1,0 +1,44 @@
+apiVersion: syml.somebugs.com/v1
+kind: Meta
+meta:
+  name: syml-cli
+  desc: >-
+    Syml toolkit CLI
+
+spec:
+  provides:
+    - interface: cli
+      commands:
+        - group: system
+          commands:
+            - command: up
+            - command: down
+            - command: check-rust
+            - command: check-go
+
+        - group: profiles
+          commands:
+            - command: list
+            - command: create
+            - command: delete
+            - command: alias
+
+        - group: db-reverser
+          commands:
+            - command: alchemy
+
+        - group: schemas
+          commands:
+            - command: get
+            - command: validate
+
+  requires:
+    - runtime: python>=3.9
+    - tool: pipenv
+
+    - service: profiles
+    - service: db-reverser
+    - service: schemas
+    - service: rust-codegen
+    - service: go-parquet
+
