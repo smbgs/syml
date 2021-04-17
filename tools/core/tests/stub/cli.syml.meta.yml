@@ -7,29 +7,36 @@ meta:
 spec:
 
   provides:
-    - interface: cli
-      actions:
+    interfaces:
+      - type: cli
+        actions:
 
-        - group: stub
-          actions:
-            - name: get
-              args:
-                --path: str
-                --validate: bool
-            - name: validate
-              args:
-                --path: str
+          - group: stub
+            actions:
+              - name: get
+                args:
+                  --path: str
+                  --validate: bool
+              - name: validate
+                args:
+                  --path: str
 
-        - group: profile-based
-          args:
-            profile: str
-          actions:
-            - name: command1
-              args:
-                --p1: str
-                --p2: bool
+          - group: profile-based
+            args:
+              profile: str
+            actions:
+              - name: command1
+                args:
+                  --p1: str
+                  --p2: bool
 
   requires:
-    - runtime: python>=3.9
-    - tool: pipenv
-    - service: ./service.syml.meta.yml
+
+    runtimes:
+      - python>=3.9
+
+    tools:
+      - pipenv
+
+    services:
+      - manifest: ./service.syml.meta.yml

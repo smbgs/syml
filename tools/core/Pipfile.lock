@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "98a6f8574d23150870d0f3a263dc89985cb9a693322a7518d64476d67cc65b9d"
+            "sha256": "6e9db38fe6e9c7b7902339bd391007aae205aff508fe25540f59364fa3d480a7"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -40,12 +40,23 @@
             "version": "==3.11.1"
         },
         "marshmallow-dataclass": {
+            "extras": [
+                "enum",
+                "union"
+            ],
             "hashes": [
                 "sha256:035f4aa9f516ca3c14c9ae3905fe8370b14cea6462ec1a9d4451209a6117976e",
                 "sha256:26b6ef76646c6cd71df3163c7106ddeaab27d9fac355cad41046627d5c15cda0"
             ],
             "index": "pypi",
             "version": "==8.4.1"
+        },
+        "marshmallow-enum": {
+            "hashes": [
+                "sha256:38e697e11f45a8e64b4a1e664000897c659b60aa57bfa18d44e226a9920b6e58",
+                "sha256:57161ab3dbfde4f57adeb12090f39592e992b9c86d206d02f6bd03ebec60f072"
+            ],
+            "version": "==1.5.1"
         },
         "mergedeep": {
             "hashes": [
@@ -112,6 +123,13 @@
             ],
             "index": "pypi",
             "version": "==10.1.0"
+        },
+        "typeguard": {
+            "hashes": [
+                "sha256:7d1cf82b35e9ff3cd083133ebda54ad1d7a40296471397e6c6b229cf07fe5307",
+                "sha256:fca77fd4ccba63465b421cdbbab5a1a8e3994e6d6f18b45da2bb475c09f147ef"
+            ],
+            "version": "==2.12.0"
         },
         "typing-extensions": {
             "hashes": [

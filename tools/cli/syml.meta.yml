@@ -7,46 +7,51 @@ meta:
 
 spec:
   provides:
-    - features:
-        - name: command-line-interface
-        - name: syml-profile-management
-        - name: db-reverser-client
-        - name: syml-schema-management
+    features:
+      - name: command-line-interface
+      - name: syml-profile-management
+      - name: db-reverser-client
+      - name: syml-schema-management
 
-    - interface: cli
-      commands:
-        - group: system
-          commands:
-            - command: up
-            - command: down
-            - command: check-rust
-            - command: check-go
+    interfaces:
+      - type: cli
+        commands:
+          - group: system
+            commands:
+              - command: up
+              - command: down
+              - command: check-rust
+              - command: check-go
 
-        - group: profiles
-          commands:
-            - command: list
-            - command: create
-            - command: delete
-            - command: alias
+          - group: profiles
+            commands:
+              - command: list
+              - command: create
+              - command: delete
+              - command: alias
 
-        - group: db-reverser
-          commands:
-            - command: alchemy
+          - group: db-reverser
+            commands:
+              - command: alchemy
 
-        - group: schemas
-          commands:
-            - command: get
-            - command: validate
+          - group: schemas
+            commands:
+              - command: get
+              - command: validate
 
   requires:
-    - runtime: python>=3.9
-    - tool: pipenv
+    runtimes:
+      - python>=3.9
 
-    - service: @syml/profiles
-    - service: @syml/db-reverser
-    - service: @syml/schemas
-    - service: @syml/rust-codegen
-    - service: @syml/go-parquet
+    tools:
+      - pipenv
+
+    services:
+      - @syml/profiles
+      - @syml/db-reverser
+      - @syml/schemas
+      - @syml/rust-codegen
+      - @syml/go-parquet
 
   overrides:
     dev:

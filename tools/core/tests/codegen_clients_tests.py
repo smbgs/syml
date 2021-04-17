@@ -12,7 +12,7 @@ class CodegenTestCase(unittest.TestCase):
 
         meta = MetaLoader.from_path(Path(__file__).parent / 'stub' / 'service.syml.meta.yml')
 
-        module = generate_clients_module({'test-service': prov.actions for prov in meta.spec.provides})
+        module = generate_clients_module({'test-service': prov.actions for prov in meta.spec.provides.interfaces})
 
         print(ast.unparse(module))
 

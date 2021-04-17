@@ -6,19 +6,25 @@ meta:
 
 spec:
   provides:
-    - interface: syml
-      actions:
 
-        - name: get
-          args:
-            path: str
-            validate: bool
+    interfaces:
+      - type: syml
+        actions:
 
-        - name: validate
-          args:
-            path: str
+          - name: get
+            args:
+              path: str
+              validate: bool
+
+          - name: validate
+            args:
+              path: str
 
   requires:
-    - runtime: python>=3.9
-    - tool: pipenv
+
+    runtimes:
+      - python>=3.9
+
+    tools:
+      - pipenv
 

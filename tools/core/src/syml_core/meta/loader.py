@@ -1,5 +1,5 @@
 import copy
-import typing
+from typing import *
 from dataclasses import dataclass
 from pathlib import Path
 import yaml
@@ -16,27 +16,45 @@ class MetaSpec:
 @dataclass
 class ActionSpec:
     name: str
-    args: typing.Dict[str, str]
+    args: Dict[str, str]
 
 
 @dataclass
-class SpecProvidesItemSpec:
-    interface: typing.Optional[str]
-    actions: typing.List[ActionSpec]
+class ActionGroupSpec:
+    group: str
+    actions: List[Union[
+        ActionSpec,
+        'ActionGroupSpec',
+    ]]
 
 
 @dataclass
-class SpecRequiresItemSpec:
-    runtime: typing.Optional[str]
-    service: typing.Optional[str]
-    tool: typing.Optional[str]
+class InterfaceSpec:
+    type: str
+    actions: List[Union[
+        ActionSpec,
+        'ActionGroupSpec',
+    ]]
+
+
+@dataclass
+class ProvidesSpec:
+    interfaces: Optional[List[InterfaceSpec]]
+    features: Optional[List[str]]
+
+
+@dataclass
+class RequiresSpec:
+    runtimes: Optional[List[str]]
+    services: Optional[List[str]]
+    tools: Optional[List[str]]
 
 
 @dataclass
 class SpecSpec:
-    provides: typing.List[SpecProvidesItemSpec]
-    requires: typing.List[SpecRequiresItemSpec]
-    overrides: typing.Optional[typing.Dict[str, dict]]
+    provides: Optional[ProvidesSpec]
+    requires: Optional[RequiresSpec]
+    overrides: Optional[Dict[str, dict]]
 
 
 class MetaLoader:
