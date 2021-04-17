@@ -7,6 +7,12 @@ meta:
 
 spec:
   provides:
+    - features:
+        - name: command-line-interface
+        - name: syml-profile-management
+        - name: db-reverser-client
+        - name: syml-schema-management
+
     - interface: cli
       commands:
         - group: system
@@ -36,9 +42,13 @@ spec:
     - runtime: python>=3.9
     - tool: pipenv
 
-    - service: profiles
-    - service: db-reverser
-    - service: schemas
-    - service: rust-codegen
-    - service: go-parquet
+    - service: @syml/profiles
+    - service: @syml/db-reverser
+    - service: @syml/schemas
+    - service: @syml/rust-codegen
+    - service: @syml/go-parquet
 
+  overrides:
+    dev:
+      environment:
+        DEBUG: yes

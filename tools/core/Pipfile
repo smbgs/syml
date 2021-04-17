@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 rich = "*"
 pyyaml = "*"
+mergedeep = "*"
+marshmallow = "*"
+marshmallow-dataclass = "*"
 
 [dev-packages]
 

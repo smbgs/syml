@@ -1,9 +1,8 @@
 apiVersion: syml.somebugs.com/v1
 kind: Meta
 meta:
-  name: syml-schemas
-  desc: >-
-    Syml Schemas Management Service
+  name: syml-stub-service
+  desc: "Syml Stub Service"
 
 spec:
   provides:
