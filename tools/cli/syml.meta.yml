@@ -1,0 +1,59 @@
+apiVersion: syml.somebugs.com/v1
+kind: Meta
+meta:
+  name: syml-cli
+  desc: >-
+    Syml toolkit CLI
+
+spec:
+  provides:
+    features:
+      - name: command-line-interface
+      - name: syml-profile-management
+      - name: db-reverser-client
+      - name: syml-schema-management
+
+    interfaces:
+      - type: cli
+        commands:
+          - group: system
+            commands:
+              - command: up
+              - command: down
+              - command: check-rust
+              - command: check-go
+
+          - group: profiles
+            commands:
+              - command: list
+              - command: create
+              - command: delete
+              - command: alias
+
+          - group: db-reverser
+            commands:
+              - command: alchemy
+
+          - group: schemas
+            commands:
+              - command: get
+              - command: validate
+
+  requires:
+    runtimes:
+      - python>=3.9
+
+    tools:
+      - pipenv
+
+    services:
+      - @syml/profiles
+      - @syml/db-reverser
+      - @syml/schemas
+      - @syml/rust-codegen
+      - @syml/go-parquet
+
+  overrides:
+    dev:
+      environment:
+        DEBUG: yes

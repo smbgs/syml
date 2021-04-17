@@ -1,0 +1,25 @@
+apiVersion: syml.somebugs.com/v1
+kind: Meta
+meta:
+  name: syml-schemas
+  desc: >-
+    Syml Schemas Management Service
+
+spec:
+  provides:
+    - interface: syml
+      actions:
+
+        - name: get
+          args:
+            path: str
+            validate: bool
+
+        - name: validate
+          args:
+            path: str
+
+  requires:
+    - runtime: python>=3.9
+    - tool: pipenv
+

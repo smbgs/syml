@@ -3,13 +3,12 @@ from io import StringIO
 
 import yaml
 from rich import box
-from rich.box import Box
 from rich.console import RenderGroup
 from rich.panel import Panel
 from rich.syntax import Syntax
 from rich.table import Table
 
-from syml_cli.clients import Clients
+from syml_cli.gen.clients import Clients
 from syml_cli.common import SymlServiceBasedCLI, CUSTOM
 
 

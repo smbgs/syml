@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 rich = "*"
+pyyaml = "*"
+mergedeep = "*"
+marshmallow = "*"
+marshmallow-dataclass = {version="*", extras=["enum" , "union"]}
 
 [dev-packages]
 

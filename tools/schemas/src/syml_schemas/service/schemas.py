@@ -4,7 +4,7 @@ from syml_core import TOOLS_ROOT
 from syml_core.service_base.base import LocalServiceBase
 from syml_core.service_base.protocol import SymlServiceCommand, \
     SymlServiceResponse
-from .parameters import ValidateSchemaParams, GetSchemaParams
+from syml_schemas.gen.parameters import ValidateSchemaParams, GetSchemaParams
 from ..definitions import SchemaDefinition
 from ..specs import Spec
 

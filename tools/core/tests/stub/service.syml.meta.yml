@@ -1,0 +1,30 @@
+apiVersion: syml.somebugs.com/v1
+kind: Meta
+meta:
+  name: syml-stub-service
+  desc: "Syml Stub Service"
+
+spec:
+  provides:
+
+    interfaces:
+      - type: syml
+        actions:
+
+          - name: get
+            args:
+              path: str
+              validate: bool
+
+          - name: validate
+            args:
+              path: str
+
+  requires:
+
+    runtimes:
+      - python>=3.9
+
+    tools:
+      - pipenv
+
