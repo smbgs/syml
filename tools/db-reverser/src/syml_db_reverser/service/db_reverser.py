@@ -12,13 +12,7 @@ class SymlDBReverserService(LocalServiceBase):
         # TODO: this should not be a service, probably?
         super().__init__('db-reverser')
 
-    async def cmd_alchemy(self, cmd: SymlServiceCommand[ReverseUsingAlchemy]):
-
-        connection_string = cmd.args.connection_string
-        schemas = cmd.args.schemas
-        objects_names = cmd.args.objects_names
-        objects_types = cmd.args.objects_types
-
+    def get_database_metadata(self, connection_string, schemas, objects_names, objects_types):
         if connection_string == '@postgres':
             connection_string = "postgresql://postgres:password@localhost:5432/symltest"
             # TODO: postgres in the docker locally or something like that?
@@ -40,6 +34,75 @@ class SymlDBReverserService(LocalServiceBase):
             metadata.reflect(only=objects_names.split(','))
         else:
             metadata.reflect()
+
+        return metadata
+
+    async def cmd_lol(self, cmd: SymlServiceCommand[ReverseUsingAlchemy]):
+        metadata = self.get_database_metadata(
+            connection_string=cmd.args.connection_string,
+            schemas=cmd.args.schemas,
+            objects_names=cmd.args.objects_names,
+            objects_types=cmd.args.objects_types,
+        )
+
+        entities = []
+
+        for table in metadata.tables.values():
+            columns = []
+
+            for column in table.columns.values():
+                constraints = []
+                constraintTypes = {
+                    'primary_key': 'pk',
+                    'nullable': 'nullable', #TODO: Add unique
+                    'autoincrement': 'autoincrement',
+                    'inherit_cache': 'inherit-cache',
+                    'is_clause_element': 'clause-element',
+                    'is_literal': 'literal',
+                    'is_selectable': 'selectable',
+                    'supports_execution': 'supports-execution',
+                    'system': 'system',
+                    'uses_inspection': 'uses-inspection',
+                }
+
+                for originalConstraint, constraint in constraintTypes.items():
+                    if getattr(column, originalConstraint) is True:
+                        constraints.append(constraint)
+
+                entity_column = {
+                    'name': column.name,
+                    'type': str(column.type),
+                    'constraints': constraints,
+                }
+
+                columns.append(entity_column)
+
+            entity = {
+                'kind': 'database',
+                'provider': 'postgres', # TODO: INSERT DB TYPE
+                'type': 'table',
+                'name': table.name,
+                'description': table.description,
+                'spec': {
+                    'database': 'database_name', # TODO: INSERT DB
+                    'columns': columns,
+                    'constraints': []
+                },
+            }
+
+            entities.append(entity)
+
+        return SymlServiceResponse(
+            data=entities,
+        )
+
+    async def cmd_alchemy(self, cmd: SymlServiceCommand[ReverseUsingAlchemy]):
+        metadata = self.get_database_metadata(
+            connection_string=cmd.args.connection_string,
+            schemas=cmd.args.schemas,
+            objects_names=cmd.args.objects_names,
+            objects_types=cmd.args.objects_types,
+        )
 
         # TODO:  filter tables by schema name maybe? probably not gonna work :(
         return SymlServiceResponse(

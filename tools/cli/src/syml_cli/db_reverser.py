@@ -1,4 +1,8 @@
+from io import StringIO
+
+import yaml
 from rich import box
+from rich.syntax import Syntax
 from rich.table import Table
 
 from syml_cli.clients import Clients
@@ -6,6 +10,41 @@ from syml_cli.common import SymlServiceBasedCLI
 
 
 class SymlDBReverserCLI(SymlServiceBasedCLI):
+
+    def lol(
+            self,
+
+            # DB Reverser parameters
+            connection_string='@postgres',
+            schemas='@all',
+            objects_names='@all',
+            objects_types='@all',
+
+            # DB Schema Serializer parameters
+            output='cli',
+            stream='@stdout'
+    ):
+        result = Clients.db_reverser.lol(
+            args=dict(
+                connection_string=connection_string,
+                schemas=schemas,
+                objects_names=objects_names,
+                objects_types=objects_types,
+            )
+        )
+
+        schema = StringIO()
+        yaml.dump(
+            result['data'], schema,
+            sort_keys=False
+        )
+        schema.seek(0)
+        syntax = Syntax(
+            schema.read(), "yaml", theme="native",
+            line_numbers=True
+        )
+        self.console.print()
+        self.console.print(syntax)
 
     def alchemy(
         self,
