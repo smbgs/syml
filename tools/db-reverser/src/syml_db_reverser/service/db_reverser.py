@@ -1,9 +1,11 @@
-from sqlalchemy import MetaData, create_engine, ForeignKey
+from sqlalchemy import MetaData, create_engine, ForeignKey, ForeignKeyConstraint, CheckConstraint, UniqueConstraint
 
 from syml_core.service_base.base import LocalServiceBase
 from syml_core.service_base.protocol import SymlServiceResponse, \
     SymlServiceCommand
 from syml_db_reverser.service.parameters import ReverseUsingAlchemy
+from syml_db_reverser.service.types import TableEntity, SpecTable, ColumnEntity, Constraints, ForeignKeyConstraintType, \
+    CheckConstraintType
 
 
 class SymlDBReverserService(LocalServiceBase):
@@ -27,7 +29,7 @@ class SymlDBReverserService(LocalServiceBase):
         metadata = MetaData(engine)
 
         # TODO: check if we can get schema list instead
-        #self.metadata = MetaData(engine, schema=schema)
+        # self.metadata = MetaData(engine, schema=schema)
 
         # TODO: support for views, and other object types
         if objects_names != '@all':
@@ -37,6 +39,11 @@ class SymlDBReverserService(LocalServiceBase):
 
         return metadata
 
+    def create_constraint_list_if_not_exist(self, constraints: Constraints, key: str):
+        if getattr(constraints, key) is None:
+            setattr(constraints, key, [])
+
+
     async def cmd_lol(self, cmd: SymlServiceCommand[ReverseUsingAlchemy]):
         metadata = self.get_database_metadata(
             connection_string=cmd.args.connection_string,
@@ -45,50 +52,67 @@ class SymlDBReverserService(LocalServiceBase):
             objects_types=cmd.args.objects_types,
         )
 
-        entities = []
+        entities: list[TableEntity] = []
 
         for table in metadata.tables.values():
-            columns = []
+            columns: list[ColumnEntity] = []
+            constraints = Constraints()
+
+            for constraint in table.constraints:
+                if isinstance(constraint, ForeignKeyConstraint):
+                    self.create_constraint_list_if_not_exist(constraints, 'foreignKeys')
+
+                    constraints.foreignKeys.append(ForeignKeyConstraintType(
+                        name=constraint.name,
+                        columnNames=constraint.column_keys,
+                        elements=[element.target_fullname for element in constraint.elements],
+                        onDelete=constraint.ondelete,
+                        onUpdate=constraint.onupdate,
+                        matchFull=constraint.match
+                    ))
+
+                if isinstance(constraint, CheckConstraint):
+                    self.create_constraint_list_if_not_exist(constraints, 'check')
+
+                    constraints.check.append(CheckConstraintType(
+                        name=constraint.name,
+                        condition=constraint.sqltext.text
+                    ))
+
+                if isinstance(constraint, UniqueConstraint):
+                    self.create_constraint_list_if_not_exist(constraints, 'unique')
+                    for constraint_unique_column in constraint.columns.values():
+                        getattr(constraints, 'unique').append(constraint_unique_column.name)
 
             for column in table.columns.values():
-                constraints = []
-                constraintTypes = {
-                    'primary_key': 'pk',
-                    'nullable': 'nullable', #TODO: Add unique
+                constraint_column_types = {
+                    'primary_key': 'primaryKey',
+                    'nullable': 'nullable',
                     'autoincrement': 'autoincrement',
-                    'inherit_cache': 'inherit-cache',
-                    'is_clause_element': 'clause-element',
-                    'is_literal': 'literal',
-                    'is_selectable': 'selectable',
-                    'supports_execution': 'supports-execution',
-                    'system': 'system',
-                    'uses_inspection': 'uses-inspection',
                 }
 
-                for originalConstraint, constraint in constraintTypes.items():
-                    if getattr(column, originalConstraint) is True:
-                        constraints.append(constraint)
+                for original_constraint_key, constraint_name in constraint_column_types.items():
+                    if getattr(column, original_constraint_key):
+                        self.create_constraint_list_if_not_exist(constraints, constraint_name)
+                        getattr(constraints, constraint_name).append(column.name)
 
-                entity_column = {
-                    'name': column.name,
-                    'type': str(column.type),
-                    'constraints': constraints,
-                }
+                column_entity = ColumnEntity(
+                    name=column.name,
+                    type=str(column.type),
+                )
 
-                columns.append(entity_column)
+                columns.append(column_entity)
 
-            entity = {
-                'kind': 'database',
-                'provider': 'postgres', # TODO: INSERT DB TYPE
-                'type': 'table',
-                'name': table.name,
-                'description': table.description,
-                'spec': {
-                    'database': 'database_name', # TODO: INSERT DB
-                    'columns': columns,
-                    'constraints': []
-                },
-            }
+            entity_spec = SpecTable(
+                columns=columns,
+                constraints=constraints
+            )
+
+            entity = TableEntity(
+                name=table.name,
+                description=table.description,
+                spec=entity_spec
+            )
 
             entities.append(entity)
 

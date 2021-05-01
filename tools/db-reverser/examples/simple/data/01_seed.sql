@@ -557,6 +557,15 @@ CREATE TABLE public.city (
                              last_update timestamp without time zone DEFAULT now() NOT NULL
 );
 
+CREATE TABLE public.person (
+                        id SERIAL PRIMARY KEY,
+                        first_name VARCHAR (50),
+                        last_name VARCHAR (50),
+                        email VARCHAR (50),
+                        active BOOLEAN,
+                        UNIQUE (email, last_name)
+);
+
 
 ALTER TABLE public.city OWNER TO postgres;
 
@@ -1235,6 +1244,8 @@ ALTER TABLE ONLY public.store
 --
 
 CREATE INDEX film_fulltext_idx ON public.film USING gist (fulltext);
+
+CREATE INDEX index_active_persons ON public.person using btree(active) where active is true;
 
 
 --
